@@ -18,7 +18,6 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 			a.assay_id,
 			cnd_s.canonical_smiles, 
 			act.pchembl_value,
-			act.standard_units
 		FROM target_dictionary td
 		INNER JOIN assays a ON td.tid = a.tid
 		INNER JOIN activities act ON a.assay_id = act.assay_id
