@@ -1,3 +1,4 @@
+import sys
 import psycopg2
 import pandas as pd
 import pandas.io.sql as sqlio
@@ -16,26 +17,28 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 		SELECT 
 			a.assay_id,
 			cnd_s.canonical_smiles, 
-			act.pchembl_value
+			act.pchembl_value,
+			act.standard_units
 		FROM target_dictionary td
-		JOIN assays a ON td.tid = a.tid
-		JOIN activities act ON a.assay_id = act.assay_id
-		JOIN molecule_dictionary md ON act.molregno = md.molregno
-		JOIN compound_structures cnd_s ON md.molregno = cnd_s.molregno
+		INNER JOIN assays a ON td.tid = a.tid
+		INNER JOIN activities act ON a.assay_id = act.assay_id
+		INNER JOIN molecule_dictionary md ON act.molregno = md.molregno
+		INNER JOIN compound_structures cnd_s ON md.molregno = cnd_s.molregno
+		WHERE act.pchembl_value > 0
 		"""
 	cursor.execute(query)
 
 	cursor.execute("SELECT count(*) FROM temp_bioassay_table")
 	print(f'{cursor.fetchone()[0]} rows extracted from Chembl')
 
+	# sql = "SELECT * FROM temp_bioassay_table fetch first 10 rows only"
 	sql = "SELECT * FROM temp_bioassay_table"
 	df = sqlio.read_sql_query(sql, conn)
 
 	return df.copy()
 
 if __name__ == '__main__':
-	db_user = "chembl_user"
-	db_password = "aaa"
+	db_user = sys.argv[1]
+	db_password = sys.argv[2]
 	df = chembl_activity_target(db_user, db_password)
-
-	# TODO: convert the df to CSV / decide on something that'll make it easy for us to run pytorch on this
+	# df.to_csv('bioassay_table.csv')
