@@ -17,7 +17,7 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 		SELECT 
 			a.assay_id,
 			cnd_s.canonical_smiles, 
-			act.pchembl_value,
+			act.pchembl_value
 		FROM target_dictionary td
 		INNER JOIN assays a ON td.tid = a.tid
 		INNER JOIN activities act ON a.assay_id = act.assay_id
@@ -40,4 +40,4 @@ if __name__ == '__main__':
 	db_user = sys.argv[1]
 	db_password = sys.argv[2]
 	df = chembl_activity_target(db_user, db_password)
-	# df.to_csv('bioassay_table.csv')
+	df.to_csv('bioassay_table.csv')
