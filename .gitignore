@@ -161,5 +161,6 @@ cython_debug/
 
 # Datasets (large, do not push)
 /chembl_33
+bioassay_table.csv
 
 .DS_Store

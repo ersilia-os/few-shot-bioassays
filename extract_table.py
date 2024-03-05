@@ -29,6 +29,9 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 
 	cursor.execute("SELECT count(*) FROM temp_bioassay_table")
 	print(f'{cursor.fetchone()[0]} rows extracted from Chembl')
+	cursor.execute("SELECT COUNT(DISTINCT assay_id) FROM temp_bioassay_table")
+	print(f'{cursor.fetchone()[0]} unique assays extracted from Chembl')
+
 
 	# sql = "SELECT * FROM temp_bioassay_table fetch first 10 rows only"
 	sql = "SELECT * FROM temp_bioassay_table"
@@ -40,4 +43,4 @@ if __name__ == '__main__':
 	db_user = sys.argv[1]
 	db_password = sys.argv[2]
 	df = chembl_activity_target(db_user, db_password)
-	df.to_csv('bioassay_table.csv')
+	# df.to_csv('bioassay_table.csv')
