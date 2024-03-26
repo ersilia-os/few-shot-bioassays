@@ -3,6 +3,8 @@ import csv
 import pandas as pd
 import numpy as np
 
+ACTIVE_CUTOFF = 6
+
 # Assuming you have a DataFrame named 'df' with the data and 'pchembl_value' as the column
 df = pd.read_csv('bioassay_table_filtered.csv')
 
@@ -29,4 +31,10 @@ plt.ylabel('Frequency')
 plt.title('Histogram of pchembl_value')
 plt.show()
 
-filtered_df.to_csv('bioassay_table_filtered_active.csv')
+# For each line of bioassay_table_filtered.csv, 
+# if pchembl_value > cutoff then active = true, otherwise active = false
+activity_benchmark = lambda x: 'true' if x > ACTIVE_CUTOFF else 'false'
+filtered_df['active'] = filtered_df['pchembl_value'].apply(activity_benchmark)
+
+# Save to new csv
+filtered_df.to_csv('bioassay_table_filtered_active.csv', index=False)
