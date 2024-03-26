@@ -163,5 +163,6 @@ cython_debug/
 /chembl_33
 bioassay_table.csv
 bioassay_table_filtered.csv
+bioassay_table_filtered_active.csv
 
 .DS_Store
