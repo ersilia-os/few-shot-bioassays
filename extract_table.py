@@ -50,13 +50,17 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 			a.assay_id,
 			td.target_type,
 			td.pref_name AS target_pref_name,
+			td.tid as target_id,
 			a.assay_organism,
 			a.confidence_score,
 			oct.l1 AS organism_taxonomy_l1,
 			oct.l2 AS organism_taxonomy_l2,
 			oct.l3 AS organism_taxonomy_l3,
 			cnd_s.canonical_smiles AS smiles, 
-			act.pchembl_value
+			act.pchembl_value,
+			act.standard_value,
+			act.standard_units,
+			act.standard_relation
 		FROM target_dictionary td
 		INNER JOIN assays a ON td.tid = a.tid
 		INNER JOIN organism_class oct ON a.assay_tax_id = oct.tax_id

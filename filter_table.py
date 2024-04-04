@@ -4,13 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing')
-sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/utils')
 from clean import *
 from featurize import *
-
-from standardizer import Standardizer
-from rdkit import Chem
-from rdkit.Chem.Descriptors import MolWt
 
 ACTIVE_CUTOFF = 6
 FILTER_CRITERIA = 16
@@ -58,46 +53,34 @@ def prepare_data(df):
     """
         We now want to store the data as it is stored by FSMol. 
         The ExtractDataset notebook and preprocessing folder contain useful information.
+
         After loading in the assays
             (information: chembl_id, assay_type, molregno_num, confidence_score),
         and for each assay relevant data
             (information: CHEMBL_ASSAY_PROTEIN query in preprocessing/utils/queries.py),
-        they 'clean' the data by 
-            1. Removing all assays that do not have units %, uM, nM
-            2. Standardizing SMILES
-            3. Applying a thresholding technique based on median activity measurement of the assay (given some criteria)
-                3a. The default is 5 if criteria are not met
-        they split into train/test/validation in part based on a classification of the assay.
-        That is, depending on the type of protein target.
-        Finally, they 'featureize' the SMILES string and use it to create rdkit mol objects.
 
-        Of these steps, those that seem relevant are the standardization of SMILES and the featurization.
+        FS-MOL performs the following steps:
+        1. 'Clean' the data by 
+            1.1 Removing all assays that do not have units %, uM, nM
+
+            1.2 Standardizing
+                1.2a Standardize the smiles string
+                1.2b Remove > 900 Da moleculare weight
+                1.2c get log standard values
+                1.2d Remove any repeats with conflicting measurements
+
+            1.3 Applying a thresholding technique based on median activity measurement of the assay (given some criteria)
+                1.3a The default is 5 if criteria are not met
+
+        2. Classify proteins and split into tran/test/validation
+
+        3. Featurize the SMILES string to created to create rdkit mol objects.
+
+        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and 3
     """
 
-    # Get small sample from df
-    small_df = df.head(10) 
-
-    sm = Standardizer(canon_taut=True)
-
-    def standardize_smile(x: str):
-        try:
-            mol = Chem.MolFromSmiles(x)
-            mol_weight = MolWt(mol)  # get molecular weight to do downstream filtering
-            num_atoms = mol.GetNumAtoms()
-            standardized_mol, _ = sm.standardize_mol(mol)
-            return Chem.MolToSmiles(standardized_mol), mol_weight, num_atoms
-        except Exception:
-            # return a fail as None (downstream filtering)
-            return None
-
-    standard = small_df["smiles"].apply(lambda row: standardize_smile(row))
-    small_df["canonical_smiles"] = standard.apply(lambda row: row[0])
-    small_df["molecular_weight"] = standard.apply(lambda row: row[1])
-    small_df["num_atoms"] = standard.apply(lambda row: row[2])
-
-    # clean_df = standardize_smiles(df)
-    # print(clean_df)
-    return small_df    
+    standard_df = standardize(df)
+        
 
 if __name__ ==  '__main__':
     # Assuming you have a DataFrame named 'df' with the data and 'pchembl_value' as the column
