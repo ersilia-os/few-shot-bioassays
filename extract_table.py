@@ -55,7 +55,7 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 			oct.l1 AS organism_taxonomy_l1,
 			oct.l2 AS organism_taxonomy_l2,
 			oct.l3 AS organism_taxonomy_l3,
-			cnd_s.canonical_smiles, 
+			cnd_s.canonical_smiles AS smiles, 
 			act.pchembl_value
 		FROM target_dictionary td
 		INNER JOIN assays a ON td.tid = a.tid
