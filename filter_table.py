@@ -4,8 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing')
+sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/utils')
+
 from clean import *
-from featurize import *
+from featurise_utils import *
 
 ACTIVE_CUTOFF = 6
 FILTER_CRITERIA = 16
@@ -65,6 +67,7 @@ def prepare_data(df):
 
             1.2 Standardizing
                 1.2a Standardize the smiles string
+                    note: I changed a function in cleaning_utils.py to deal with an error.
                 1.2b Remove > 900 Da moleculare weight
                 1.2c get log standard values
                 1.2d Remove any repeats with conflicting measurements
@@ -76,15 +79,19 @@ def prepare_data(df):
 
         3. Featurize the SMILES string to created to create rdkit mol objects.
 
-        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and 3
+        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and (TODO) 3
+            the useful functions for this feauturization are in featurise_utils.py
+            I believe we only care about the _smiles_to_rdkit_mol function, 
+            the functions above in the hierarchy are related to how they store their data.
     """
+    small_df = df.copy().head(100)
 
-    standard_df = standardize(df)
-        
+    standard_df = standardize(small_df)
+    return standard_df
 
 if __name__ ==  '__main__':
     # Assuming you have a DataFrame named 'df' with the data and 'pchembl_value' as the column
     df = pd.read_csv('bioassay_table_filtered.csv')
     filtered_df = filter_assays(df)
-    clean_df = prepare_data(filtered_df)
-    print(clean_df)
+    standard_df = prepare_data(filtered_df)
+    standard_df.to_csv('bioassay_table_standard.csv')

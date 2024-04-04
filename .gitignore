@@ -164,5 +164,6 @@ cython_debug/
 bioassay_table.csv
 bioassay_table_filtered.csv
 bioassay_table_filtered_active.csv
+bioassay_table_standard.csv
 
 .DS_Store
