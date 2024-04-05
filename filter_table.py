@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing')
-sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/utils')
+sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/featurisers')
 
 from clean import *
 from featurise_utils import *
@@ -80,13 +80,13 @@ def prepare_data(df):
         3. Featurize the SMILES string to created to create rdkit mol objects.
 
         THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and (TODO) 3
-            the useful functions for this feauturization are in featurise_utils.py
+            the useful functions for this feauturization are in feautrisers subfolder of preprocessing
             I believe we only care about the _smiles_to_rdkit_mol function, 
             the functions above in the hierarchy are related to how they store their data.
     """
-    small_df = df.copy().head(100)
+    # small_df = df.copy().head(100)
 
-    standard_df = standardize(small_df)
+    standard_df = standardize(df)
     return standard_df
 
 if __name__ ==  '__main__':
