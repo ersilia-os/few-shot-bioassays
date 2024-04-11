@@ -4,13 +4,27 @@ import argparse
 import csv
 import pandas as pd
 import numpy as np
+import functools
 import matplotlib.pyplot as plt
 
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing')
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/featurisers')
+sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/utils')
 
 from clean import *
 from featurise_utils import *
+from save_utils import *
+from rdkit import DataStructs
+from rdkit.Chem import (
+    Mol,
+    RDConfig,
+    Descriptors,
+    MolFromSmiles,
+    rdFingerprintGenerator,
+)
+from rdkit.Chem.QED import qed
+from rdkit.Chem.Crippen import MolLogP
+from rdkit.Chem.Descriptors import ExactMolWt, BertzCT
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +34,7 @@ def load_params():
     parser.add_argument('--FILTER_CRITERIA', type=int, default=16)
     parser.add_argument('--SAVE', type=bool, default=False)
     parser.add_argument('--test', type=bool, default=False)
+    parser.add_argument('--num_processes', type=int, default=1)
     params = parser.parse_args()
 
     return params
@@ -138,7 +153,7 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
     csv_writer.writerow(assay_dict)
     return df
 
-def _smiles_to_rdkit_mol(
+def smiles_to_rdkit_mol(
     datapoint,
     include_fingerprints: bool = True,
     include_descriptors: bool = True,
@@ -146,7 +161,7 @@ def _smiles_to_rdkit_mol(
     report_fail_as_none: bool = False,
 ) -> Optional[Dict[str, Any]]:
     try:
-        smiles_string = datapoint["SMILES"]
+        smiles_string = datapoint["smiles"]
         rdkit_mol = MolFromSmiles(smiles_string)
 
         datapoint["mol"] = rdkit_mol
@@ -217,17 +232,14 @@ def prepare_data(df, params):
         3. Featurize the SMILES string to created to create rdkit mol objects.
 
         THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and (TODO) 3
-            the useful functions for this feauturization are in feautrisers subfolder of preprocessing
-            I believe we only care about the _smiles_to_rdkit_mol function, 
-            the functions above in the hierarchy are related to how they store their data.
     """
     # Group dataframe by assay_id
     gb = df.groupby('assay_chembl_id')
     if params.test:
-        gb = df.iloc[:100].groupby('assay_chembl_id')
+        gb = df.iloc[:10].groupby('assay_chembl_id')
 
     # Initialize a summary.csv
-    csv_file = open('summary.csv', 'a+', newline="")
+    csv_file = open('summary.csv', 'w', newline="")
     fieldnames = [
         "chembl_id",
         "target_id",
@@ -253,35 +265,29 @@ def prepare_data(df, params):
     # Close the summary.csv file
     csv_file.close()
 
-    # featurize and save data
+    # Featurize and save data
+    # Adapted from run() in featurize.py
     assays = set()
-    failed_assays = set()
-    featurised_data = None
-    for name, group in standardize_df.groupby('assay_id'):
+    for name, group in standardize_df.groupby('assay_chembl_id'):
         assays.add(name)
-        datapoint = group.to_dict('list')
-        print(datapoint)
-        assert(False)
+        datapoints = group.to_dict('list')
+        feat_data_list = []
+        for i in range(len(datapoints['smiles'])):
+            datapoint = {key: value[i] for key, value in datapoints.items()}
+            featurized_datapoint = smiles_to_rdkit_mol(datapoint)
+            feat_data_list.append(featurized_datapoint)
 
-        logger.info(f"Featurising data...")
-        try:
-            featurised_data = featurise_smiles_datapoints(
-                train_data=datapoints,
-                valid_data=datapoints[0],
-                test_data=datapoints[0],
-                atom_feature_extractors=None,
-                num_processes=-1,
-                include_descriptors=True,
-                include_fingerprints=True,
-            )
-            logger.info(f"Completed featurization; saving data now.")
+        featurized_datapoints = {}
+        for d in feat_data_list:
+            for k, v in d.items():
+                featurized_datapoints[k] = featurized_datapoints.get(k, []) + [v]
+        
+        print(featurized_datapoints)
+        # After this step, they save the data as a FeaturisedData object which 
+        # automatically does graph featurization 
 
-            save_assay_data(featurised_data, assay_id=filename, output_dir=args.OUTPUT_DIR)
-
-        except IndexError:
-            failed_assays.add(name)
-            logger.info(f"Error in featurisation found for assay {name}")
-            continue
+        # The final setp is to save as a jsonl.gz file
+        write_jsonl_gz_data(f"data/{name}.jsonl.gz", featurized_datapoints, len_data=len(featurized_datapoints))
 
     return standard_df
 
