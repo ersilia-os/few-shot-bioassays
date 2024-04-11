@@ -62,7 +62,12 @@ def implement_threshold(df, params):
     if params.save: 
         plt.savefig('compounds_per_assay.png')
     # Seems that ~60% of the assays have fewer than 5 compounds
-    # We filter out compounds with fewer than FILTER_CRITERIA compounds
+    # We filter out compounds with fewer than min_size compounds
+
+    # Grouping by assay
+    filtered_df = gp.filter(lambda x: len(x) > params.min_size)
+    logger.info('Post Initial Filtering, # of unique assays', len(filtered_df['assay_id'].unique()))
+    logger.info('Post Initial Filtering, # of unique compounds', len(filtered_df))
 
     # Plotting the histogram
     plt.clf()
@@ -93,8 +98,9 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
     # remove index if it was saved with this file (back compatible)
     if "Unnamed: 0" in df.columns:
         df.drop(columns=["Unnamed: 0"], inplace=True)
+
     # Since we are grouping by assay_id, we should drop this
-    if 'assay_id' in df.columns:
+    if 'chembl_id' in df.columns:
         df.drop(columns=['chembl_id'], inplace=True)
 
     original_size = len(df)

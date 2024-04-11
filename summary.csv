@@ -1,11 +1,34 @@
 chembl_id,target_id,assay_type,assay_organism,raw_size,cleaned_size,cleaning_failed,cleaning_size_delta,num_pos,percentage_pos,max_mol_weight,threshold,max_num_atoms,confidence_score,standard_units
-CHEMBL656737,50658,F,Human immunodeficiency virus 2,1,1,False,0,,,236.23100000000002,6,17,1,nM
-CHEMBL711808,50677,F,Human immunodeficiency virus,1,1,False,0,,,588.8760000000001,6,38,1,nM
-CHEMBL713255,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,736.918,6,54,1,nM
-CHEMBL756465,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,239.32500000000002,6,15,1,nM
-CHEMBL827685,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,547.6740000000003,6,38,1,nM
-CHEMBL834474,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,572.8710000000002,6,41,1,nM
-CHEMBL844410,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,428.39700000000016,6,31,1,nM
-CHEMBL894309,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,356.32200000000006,6,26,1,nM
-CHEMBL922937,50678,F,Respiratory syncytial virus,1,1,False,0,,,405.5460000000002,6,30,1,nM
-CHEMBL949071,50643,B,Hepatitis C virus subtype 1b,1,1,False,0,,,468.5350000000002,6,33,1,nM
+CHEMBL1000124,50607,F,Human immunodeficiency virus 1,9,1,False,8,,,580.7730000000001,6,43,1,nM
+CHEMBL1000324,50677,F,Human immunodeficiency virus,8,1,False,7,,,487.7160000000001,6,30,1,nM
+CHEMBL1000325,50677,F,Human immunodeficiency virus,9,1,False,8,,,420.27000000000004,6,27,1,nM
+CHEMBL1000328,50677,F,Human immunodeficiency virus,2,2,False,0,,,414.2270000000001,6,28,1,nM
+CHEMBL1000329,50677,F,Human immunodeficiency virus,2,2,False,0,,,414.2270000000001,6,28,1,nM
+CHEMBL1000331,50643,F,Hepatitis C virus subtype 1b,1,1,False,0,,,679.8629999999999,6,49,1,nM
+CHEMBL1000356,50658,F,Human immunodeficiency virus 2,9,1,False,8,,,554.2460000000001,6,32,1,nM
+CHEMBL1000357,50607,F,Human immunodeficiency virus 1,27,1,False,26,,,554.2460000000001,6,32,1,nM
+CHEMBL1000470,50606,F,Hepatitis B virus,3,1,False,2,,,598.8210000000003,6,43,1,nM
+CHEMBL1000472,50606,F,Hepatitis B virus,6,1,False,5,,,598.8210000000003,6,43,1,nM
+CHEMBL1000603,50607,F,Human immunodeficiency virus 1,7,1,False,6,,,601.7220000000001,6,42,1,nM
+CHEMBL1000604,50607,F,Human immunodeficiency virus 1,5,1,False,4,,,613.8030000000003,6,45,1,nM
+CHEMBL1000605,50607,F,Human immunodeficiency virus 1,4,1,False,3,,,505.63700000000034,6,35,1,nM
+CHEMBL1000606,50607,F,Human immunodeficiency virus 1,4,1,False,3,,,505.63700000000034,6,35,1,nM
+CHEMBL1000607,50607,F,Human immunodeficiency virus 1,4,1,False,3,,,505.63700000000034,6,35,1,nM
+CHEMBL1000608,50607,F,Human immunodeficiency virus 1,5,1,False,4,,,613.8030000000003,6,45,1,nM
+CHEMBL1000613,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,601.7220000000001,6,42,1,nM
+CHEMBL1000614,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,601.7220000000001,6,42,1,nM
+CHEMBL1000615,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,601.7220000000001,6,42,1,nM
+CHEMBL1000616,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,601.7220000000001,6,42,1,nM
+CHEMBL1000617,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,601.7220000000001,6,42,1,nM
+CHEMBL1000618,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,601.7220000000001,6,42,1,nM
+CHEMBL1000619,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,601.7220000000001,6,42,1,nM
+CHEMBL1000905,50442,F,Candida albicans,4,1,False,3,,,326.399,6,21,1,nM
+CHEMBL1001375,50643,F,Hepatitis C virus,6,1,False,5,,,326.7400000000001,6,22,1,nM
+CHEMBL1002054,50212,F,Escherichia coli,2,2,False,0,,,493.55800000000033,6,34,1,nM
+CHEMBL1002203,50607,F,Human immunodeficiency virus 1,4,1,False,3,,,518.3780000000003,6,34,1,nM
+CHEMBL1002204,50607,F,Human immunodeficiency virus 1,4,1,False,3,,,518.3780000000003,6,34,1,nM
+CHEMBL1002205,50607,F,Human immunodeficiency virus 1,6,1,False,5,,,456.5720000000002,6,32,1,nM
+CHEMBL1002206,50607,F,Human immunodeficiency virus 1,4,1,False,3,,,518.3780000000003,6,34,1,nM
+CHEMBL1002207,50607,F,Human immunodeficiency virus 1,5,1,False,4,,,456.5720000000002,6,32,1,nM
+CHEMBL1002208,50607,F,Human immunodeficiency virus 1,6,1,False,5,,,456.5720000000002,6,32,1,nM
+CHEMBL1002209,50607,F,Human immunodeficiency virus 1,3,1,False,2,,,518.3780000000003,6,34,1,nM
