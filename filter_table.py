@@ -19,6 +19,7 @@ def load_params():
     parser.add_argument('--ACTIVE_CUTOFF', type=int, default=6)
     parser.add_argument('--FILTER_CRITERIA', type=int, default=16)
     parser.add_argument('--SAVE', type=bool, default=False)
+    parser.add_argument('--test', type=bool, default=False)
     params = parser.parse_args()
 
     return params
@@ -62,7 +63,7 @@ def filter_assays(df, params):
 
     return filtered_df
 
-def clean_assay(df: pd.DataFrame, assay: str, csv_writer) -> pd.DataFrame:
+def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFrame:
     """
         Modified from clean_assay in FS-Mol_Orgs/fs_mol/preprocessing/clean.py
         Called on each assay. 
@@ -71,6 +72,9 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer) -> pd.DataFrame:
     # remove index if it was saved with this file (back compatible)
     if "Unnamed: 0" in df.columns:
         df.drop(columns=["Unnamed: 0"], inplace=True)
+    # Since we are grouping by assay_id, we should drop this
+    if 'assay_id' in df.columns:
+        df.drop(columns=['assay_chembl_id'], inplace=True)
 
     original_size = len(df)
 
@@ -122,10 +126,10 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer) -> pd.DataFrame:
             "cleaned_size": len(df),
             "cleaning_failed": failed,
             "cleaning_size_delta": original_size - len(df),
-            "num_pos": df["activity"].sum(),
-            "percentage_pos": df["activity"].sum() * 100 / len(df),
+            # "num_pos": df["activity"].sum(),
+            # "percentage_pos": df["activity"].sum() * 100 / len(df),
             "max_mol_weight": df.iloc[0]["max_molecular_weight"],
-            "threshold": df.iloc[0]["threshold"],
+            "threshold": params.ACTIVE_CUTOFF,
             "max_num_atoms": df.iloc[0]["max_num_atoms"],
             "confidence_score": df.iloc[0]["confidence_score"],
             "standard_units": df.iloc[0]["standard_units"],
@@ -133,6 +137,56 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer) -> pd.DataFrame:
 
     csv_writer.writerow(assay_dict)
     return df
+
+def _smiles_to_rdkit_mol(
+    datapoint,
+    include_fingerprints: bool = True,
+    include_descriptors: bool = True,
+    include_molecule_stats: bool = False,
+    report_fail_as_none: bool = False,
+) -> Optional[Dict[str, Any]]:
+    try:
+        smiles_string = datapoint["SMILES"]
+        rdkit_mol = MolFromSmiles(smiles_string)
+
+        datapoint["mol"] = rdkit_mol
+
+        # Compute fingerprints:
+        if include_fingerprints:
+            datapoint["fingerprints_vect"] = rdFingerprintGenerator.GetCountFPs(
+                [rdkit_mol], fpType=rdFingerprintGenerator.MorganFP
+            )[0]
+            fp_numpy = np.zeros((0,), np.int8)  # Generate target pointer to fill
+            DataStructs.ConvertToNumpyArray(datapoint["fingerprints_vect"], fp_numpy)
+            datapoint["fingerprints"] = fp_numpy
+
+        # Compute descriptors:
+        if include_descriptors:
+            datapoint["descriptors"] = []
+            for descr in Descriptors._descList:
+                _, descr_calc_fn = descr
+                try:
+                    datapoint["descriptors"].append(descr_calc_fn(rdkit_mol))
+                except Exception:
+                    datapoint["failed_to_convert_from_smiles"] = datapoint["SMILES"]
+
+        # Compute molecule-based scores with RDKit:
+        if include_molecule_stats:
+            datapoint["properties"] = {
+                "sa_score": compute_sa_score(datapoint["mol"]),
+                "clogp": MolLogP(datapoint["mol"]),
+                "mol_weight": ExactMolWt(datapoint["mol"]),
+                "qed": qed(datapoint["mol"]),
+                "bertz": BertzCT(datapoint["mol"]),
+            }
+
+        return datapoint
+    except Exception:
+        if report_fail_as_none:
+            datapoint["mol"] = None
+            return datapoint
+        else:
+            raise
 
 def prepare_data(df, params):
     """
@@ -168,7 +222,9 @@ def prepare_data(df, params):
             the functions above in the hierarchy are related to how they store their data.
     """
     # Group dataframe by assay_id
-    gb = df.groupby('assay_id')
+    gb = df.groupby('assay_chembl_id')
+    if params.test:
+        gb = df.iloc[:100].groupby('assay_chembl_id')
 
     # Initialize a summary.csv
     csv_file = open('summary.csv', 'a+', newline="")
@@ -193,24 +249,39 @@ def prepare_data(df, params):
     csv_writer.writeheader()
 
     # Apply clean to each assay
-    standardize_df = gb.apply(lambda x: clean_assay(x, x.name, csv_writer))
+    standardize_df = gb.apply(lambda x: clean_assay(x, x.name, csv_writer, params))
     # Close the summary.csv file
     csv_file.close()
 
+    # featurize and save data
+    assays = set()
+    failed_assays = set()
+    featurised_data = None
+    for name, group in standardize_df.groupby('assay_id'):
+        assays.add(name)
+        datapoint = group.to_dict('list')
+        print(datapoint)
+        assert(False)
 
+        logger.info(f"Featurising data...")
+        try:
+            featurised_data = featurise_smiles_datapoints(
+                train_data=datapoints,
+                valid_data=datapoints[0],
+                test_data=datapoints[0],
+                atom_feature_extractors=None,
+                num_processes=-1,
+                include_descriptors=True,
+                include_fingerprints=True,
+            )
+            logger.info(f"Completed featurization; saving data now.")
 
-    # featurised_data = featurise_smiles_datapoints(
-    #     train_data=datapoints,
-    #     valid_data=datapoints[0],
-    #     test_data=datapoints[0],
-    #     atom_feature_extractors=atom_feature_extractors,
-    #     num_processes=-1,
-    #     include_descriptors=True,
-    #     include_fingerprints=True,
-    # )
-    # logger.info(f"Completed featurization; saving data now.")
+            save_assay_data(featurised_data, assay_id=filename, output_dir=args.OUTPUT_DIR)
 
-    # save_assay_data(featurised_data, assay_id=filename, output_dir=args.OUTPUT_DIR)
+        except IndexError:
+            failed_assays.add(name)
+            logger.info(f"Error in featurisation found for assay {name}")
+            continue
 
     return standard_df
 

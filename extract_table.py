@@ -48,10 +48,12 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 		CREATE TEMP TABLE temp_bioassay_table AS
 		SELECT 
 			a.assay_id,
+			a.chembl_id as assay_chembl_id,
 			td.target_type,
 			td.pref_name AS target_pref_name,
 			td.tid as target_id,
 			a.assay_organism,
+			a.assay_type,
 			a.confidence_score,
 			oct.l1 AS organism_taxonomy_l1,
 			oct.l2 AS organism_taxonomy_l2,
