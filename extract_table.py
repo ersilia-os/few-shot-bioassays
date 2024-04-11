@@ -48,7 +48,7 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 		CREATE TEMP TABLE temp_bioassay_table AS
 		SELECT 
 			a.assay_id,
-			a.chembl_id as assay_chembl_id,
+			a.chembl_id as chembl_id,
 			td.target_type,
 			td.pref_name AS target_pref_name,
 			td.tid as target_id,

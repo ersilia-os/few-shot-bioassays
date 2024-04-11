@@ -6,14 +6,21 @@ import pandas as pd
 import numpy as np
 import functools
 import matplotlib.pyplot as plt
+from dpu_utils.utils import run_and_debug, RichPath
+
+# Silence pandas warnings
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing')
-sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/featurisers')
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/utils')
+sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/featurisers')
 
 from clean import *
 from featurise_utils import *
+from molgraph_utils import *
 from save_utils import *
+from featurize import *
 from rdkit import DataStructs
 from rdkit.Chem import (
     Mol,
@@ -26,21 +33,25 @@ from rdkit.Chem.QED import qed
 from rdkit.Chem.Crippen import MolLogP
 from rdkit.Chem.Descriptors import ExactMolWt, BertzCT
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('data_processing')
 
 def load_params():
     parser = argparse.ArgumentParser(description='Filtering bioassay arguments.')
-    parser.add_argument('--ACTIVE_CUTOFF', type=int, default=6)
-    parser.add_argument('--FILTER_CRITERIA', type=int, default=16)
-    parser.add_argument('--SAVE', type=bool, default=False)
+    parser.add_argument('--active_cutoff', type=int, default=6)
+    parser.add_argument('--save', type=bool, default=False)
     parser.add_argument('--test', type=bool, default=False)
     parser.add_argument('--num_processes', type=int, default=1)
+    parser.add_argument('--load_metadata', type=str, default='../FS-Mol-Orgs/fs_mol/preprocessing/utils/helper_files')
+    parser.add_argument('--min_size', type=int, default=16)
+    parser.add_argument('--max_size', type=int, default=None)
+    parser.add_argument('--balance_limits', type=int, default=None)
+    parser.add_argument('--sapiens_only', type=bool, default=False)
     params = parser.parse_args()
 
     return params
 
 
-def filter_assays(df, params):
+def implement_threshold(df, params):
     # Group by assay
     gp = df.groupby('assay_id')
     x = gp.size()
@@ -48,35 +59,30 @@ def filter_assays(df, params):
     plt.xlabel('Number of compounds')
     plt.ylabel('Percentage')
     plt.title('Compounds per assay')
-    if params.SAVE: 
+    if params.save: 
         plt.savefig('compounds_per_assay.png')
     # Seems that ~60% of the assays have fewer than 5 compounds
     # We filter out compounds with fewer than FILTER_CRITERIA compounds
 
-    # Grouping by assay
-    filtered_df = gp.filter(lambda x: len(x) > params.FILTER_CRITERIA)
-    logger.info('Post Filtering, # of unique assays', len(filtered_df['assay_id'].unique()))
-    logger.info('Post Filtering, # of unique compounds', len(filtered_df))
-
     # Plotting the histogram
     plt.clf()
-    plt.hist(filtered_df['pchembl_value'])
+    plt.hist(df['pchembl_value'])
     plt.xlabel('pchembl_value')
     plt.ylabel('Frequency')
     plt.title('Histogram of pchembl_value')
-    if params.SAVE: 
+    if params.save: 
         plt.savefig('pchebml_value_histogram.png')
 
     # For each line of bioassay_table_filtered.csv, 
     # if pchembl_value > cutoff then active = true, otherwise active = false
-    activity_benchmark = lambda x: 'true' if x > params.ACTIVE_CUTOFF else 'false'
-    filtered_df['active'] = filtered_df['pchembl_value'].apply(activity_benchmark)
+    activity_benchmark = lambda x: 'true' if x > params.active_cutoff else 'false'
+    df['active'] = df['pchembl_value'].apply(activity_benchmark)
 
     # Save to new csv
-    if params.SAVE:
-        filtered_df.to_csv('bioassay_table_filtered_active.csv', index=False)
+    if params.save:
+        df.to_csv('bioassay_table_filtered_active.csv', index=False)
 
-    return filtered_df
+    return df
 
 def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFrame:
     """
@@ -89,13 +95,13 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
         df.drop(columns=["Unnamed: 0"], inplace=True)
     # Since we are grouping by assay_id, we should drop this
     if 'assay_id' in df.columns:
-        df.drop(columns=['assay_chembl_id'], inplace=True)
+        df.drop(columns=['chembl_id'], inplace=True)
 
     original_size = len(df)
 
     failed = False
     try:
-        logger.info(f"Processing {assay}.")
+        print(f"Processing {assay}.")
         # df = select_assays(df, **DEFAULT_CLEANING)
         df = standardize(df)
         # df = apply_thresholds(df, **DEFAULT_CLEANING)
@@ -144,7 +150,7 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
             # "num_pos": df["activity"].sum(),
             # "percentage_pos": df["activity"].sum() * 100 / len(df),
             "max_mol_weight": df.iloc[0]["max_molecular_weight"],
-            "threshold": params.ACTIVE_CUTOFF,
+            "threshold": params.active_cutoff,
             "max_num_atoms": df.iloc[0]["max_num_atoms"],
             "confidence_score": df.iloc[0]["confidence_score"],
             "standard_units": df.iloc[0]["standard_units"],
@@ -234,9 +240,9 @@ def prepare_data(df, params):
         THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and (TODO) 3
     """
     # Group dataframe by assay_id
-    gb = df.groupby('assay_chembl_id')
+    gb = df.groupby('chembl_id')
     if params.test:
-        gb = df.iloc[:10].groupby('assay_chembl_id')
+        gb = df.iloc[:10].groupby('chembl_id')
 
     # Initialize a summary.csv
     csv_file = open('summary.csv', 'w', newline="")
@@ -265,31 +271,41 @@ def prepare_data(df, params):
     # Close the summary.csv file
     csv_file.close()
 
+    # Load data
+    if params.load_metadata:
+
+        print(f"Loading metadata from dir {params.load_metadata}")
+        metapath = RichPath.create(params.load_metadata)
+        path = metapath.join("metadata.pkl.gz")
+        metadata = path.read_by_file_suffix()
+        atom_feature_extractors = metadata["feature_extractors"]
+
+    else:
+        raise ValueError(
+            "Metadata must be loaded for this processing, please supply "
+            "directory containing metadata.pkl.gz."
+        )
+    
+    # Refilter assays after cleaning
+    assays_to_process = filter_assays('summary.csv', params)
+
     # Featurize and save data
     # Adapted from run() in featurize.py
+    stand_gb = standardize_df.groupby('chembl_id')
     assays = set()
-    for name, group in standardize_df.groupby('assay_chembl_id'):
-        assays.add(name)
+    for assay in assays_to_process:
+        group = stand_gb.get_group(assay)
+        assays.add(assay)
         datapoints = group.to_dict('list')
         feat_data_list = []
         for i in range(len(datapoints['smiles'])):
             datapoint = {key: value[i] for key, value in datapoints.items()}
             featurized_datapoint = smiles_to_rdkit_mol(datapoint)
+            datapoint["graph"] = molecule_to_graph(datapoint["mol"], atom_feature_extractors)
             feat_data_list.append(featurized_datapoint)
-
-        featurized_datapoints = {}
-        for d in feat_data_list:
-            for k, v in d.items():
-                featurized_datapoints[k] = featurized_datapoints.get(k, []) + [v]
         
-        print(featurized_datapoints)
-        # After this step, they save the data as a FeaturisedData object which 
-        # automatically does graph featurization 
-
         # The final setp is to save as a jsonl.gz file
-        write_jsonl_gz_data(f"data/{name}.jsonl.gz", featurized_datapoints, len_data=len(featurized_datapoints))
-
-    return standard_df
+        write_jsonl_gz_data(f"data/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list))
 
 if __name__ ==  '__main__':
     # Load parameters
@@ -297,6 +313,5 @@ if __name__ ==  '__main__':
 
     # Assuming you have a DataFrame named 'df' with the data and 'pchembl_value' as the column
     df = pd.read_csv('bioassay_table_filtered.csv')
-    filtered_df = filter_assays(df, params)
-    standard_df = prepare_data(filtered_df, params)
-    standard_df.to_csv('bioassay_table_standard.csv')
+    filtered_df = implement_threshold(df, params)
+    prepare_data(filtered_df, params)

@@ -1,0 +1,11 @@
+chembl_id,target_id,assay_type,assay_organism,raw_size,cleaned_size,cleaning_failed,cleaning_size_delta,num_pos,percentage_pos,max_mol_weight,threshold,max_num_atoms,confidence_score,standard_units
+CHEMBL656737,50658,F,Human immunodeficiency virus 2,1,1,False,0,,,236.23100000000002,6,17,1,nM
+CHEMBL711808,50677,F,Human immunodeficiency virus,1,1,False,0,,,588.8760000000001,6,38,1,nM
+CHEMBL713255,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,736.918,6,54,1,nM
+CHEMBL756465,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,239.32500000000002,6,15,1,nM
+CHEMBL827685,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,547.6740000000003,6,38,1,nM
+CHEMBL834474,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,572.8710000000002,6,41,1,nM
+CHEMBL844410,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,428.39700000000016,6,31,1,nM
+CHEMBL894309,50607,F,Human immunodeficiency virus 1,1,1,False,0,,,356.32200000000006,6,26,1,nM
+CHEMBL922937,50678,F,Respiratory syncytial virus,1,1,False,0,,,405.5460000000002,6,30,1,nM
+CHEMBL949071,50643,B,Hepatitis C virus subtype 1b,1,1,False,0,,,468.5350000000002,6,33,1,nM
