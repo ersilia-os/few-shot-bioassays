@@ -33,8 +33,6 @@ from rdkit.Chem.QED import qed
 from rdkit.Chem.Crippen import MolLogP
 from rdkit.Chem.Descriptors import ExactMolWt, BertzCT
 
-logger = logging.getLogger('data_processing')
-
 def load_params():
     parser = argparse.ArgumentParser(description='Filtering bioassay arguments.')
     parser.add_argument('--active_cutoff', type=int, default=6)
@@ -66,12 +64,12 @@ def implement_threshold(df, params):
 
     # Grouping by assay
     filtered_df = gp.filter(lambda x: len(x) > params.min_size)
-    logger.info('Post Initial Filtering, # of unique assays', len(filtered_df['assay_id'].unique()))
-    logger.info('Post Initial Filtering, # of unique compounds', len(filtered_df))
+    print('Post Initial Filtering, # of unique assays', len(filtered_df['assay_id'].unique()))
+    print('Post Initial Filtering, # of unique compounds', len(filtered_df))
 
     # Plotting the histogram
     plt.clf()
-    plt.hist(df['pchembl_value'])
+    plt.hist(filtered_df['pchembl_value'])
     plt.xlabel('pchembl_value')
     plt.ylabel('Frequency')
     plt.title('Histogram of pchembl_value')
@@ -81,19 +79,19 @@ def implement_threshold(df, params):
     # For each line of bioassay_table_filtered.csv, 
     # if pchembl_value > cutoff then active = true, otherwise active = false
     activity_benchmark = lambda x: 'true' if x > params.active_cutoff else 'false'
-    df['active'] = df['pchembl_value'].apply(activity_benchmark)
+    filtered_df['active'] = filtered_df['pchembl_value'].apply(activity_benchmark)
 
     # Save to new csv
     if params.save:
-        df.to_csv('bioassay_table_filtered_active.csv', index=False)
+        filtered_df.to_csv('bioassay_table_filtered_active.csv', index=False)
 
-    return df
+    return filtered_df
 
 def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFrame:
     """
         Modified from clean_assay in FS-Mol_Orgs/fs_mol/preprocessing/clean.py
         Called on each assay. 
-        Standardizes the smiles molecules for that assay, and writes a summary to csv_writer
+        Standardizes the smiles molecules for that assay, and writes a line to
     """
     # remove index if it was saved with this file (back compatible)
     if "Unnamed: 0" in df.columns:
@@ -113,13 +111,13 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
         # df = apply_thresholds(df, **DEFAULT_CLEANING)
     except Exception as e:
         df = None
-        logger.warning(f"Failed cleaning on {assay} : {e}")
+        print(f"Failed cleaning on {assay} : {e}")
         failed = True
 
     if df is None or len(df) == 0:
-        logger.warning(f"Assay {assay} was empty post cleaning.")
+        print(f"Assay {assay} was empty post cleaning.")
         failed = True
-    
+
     assay_dict = {}
     if failed:
         assay_dict = {
@@ -172,8 +170,11 @@ def smiles_to_rdkit_mol(
     include_molecule_stats: bool = False,
     report_fail_as_none: bool = False,
 ) -> Optional[Dict[str, Any]]:
+    """
+    Given a datapoint (molecule) with a SMILES string, featurize it as an rdkit_molecule
+    """
     try:
-        smiles_string = datapoint["smiles"]
+        smiles_string = datapoint["canonical_smiles"]
         rdkit_mol = MolFromSmiles(smiles_string)
 
         datapoint["mol"] = rdkit_mol
@@ -195,7 +196,7 @@ def smiles_to_rdkit_mol(
                 try:
                     datapoint["descriptors"].append(descr_calc_fn(rdkit_mol))
                 except Exception:
-                    datapoint["failed_to_convert_from_smiles"] = datapoint["SMILES"]
+                    datapoint["failed_to_convert_from_smiles"] = datapoint["canonical_smiles"]
 
         # Compute molecule-based scores with RDKit:
         if include_molecule_stats:
@@ -241,9 +242,9 @@ def prepare_data(df, params):
 
         2. Classify proteins and split into tran/test/validation
 
-        3. Featurize the SMILES string to created to create rdkit mol objects.
+        3. Featurize the SMILES string to created to create rdkit mol objects and graphs
 
-        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and (TODO) 3
+        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and 3
     """
     # Group dataframe by assay_id
     gb = df.groupby('chembl_id')
@@ -277,7 +278,11 @@ def prepare_data(df, params):
     # Close the summary.csv file
     csv_file.close()
 
-    # Load data
+    # Refilter assays after cleaning
+    assays_to_process = filter_assays('summary.csv', params)
+    print("After additional cleaning, we have", len(assays_to_process), "unique assays.")
+
+    # Load metadata for featurizations
     if params.load_metadata:
 
         print(f"Loading metadata from dir {params.load_metadata}")
@@ -291,26 +296,30 @@ def prepare_data(df, params):
             "Metadata must be loaded for this processing, please supply "
             "directory containing metadata.pkl.gz."
         )
-    
-    # Refilter assays after cleaning
-    assays_to_process = filter_assays('summary.csv', params)
 
     # Featurize and save data
-    # Adapted from run() in featurize.py
+    # Loop taken from run() of featurize.py
     stand_gb = standardize_df.groupby('chembl_id')
     assays = set()
     for assay in assays_to_process:
-        group = stand_gb.get_group(assay)
         assays.add(assay)
+
+        # For each assay, get all the molecules
+        group = stand_gb.get_group(assay)
+        # Transform into a dictionary with keys the columns
         datapoints = group.to_dict('list')
         feat_data_list = []
         for i in range(len(datapoints['smiles'])):
+            # Isolate the ith molecule
             datapoint = {key: value[i] for key, value in datapoints.items()}
+            # Add rdkit_molecule information
             featurized_datapoint = smiles_to_rdkit_mol(datapoint)
+            # And also represent it as a graph using the metadata
             datapoint["graph"] = molecule_to_graph(datapoint["mol"], atom_feature_extractors)
+            # Append to it to our list of featurized datapoints
             feat_data_list.append(featurized_datapoint)
         
-        # The final setp is to save as a jsonl.gz file
+        # Store all the information for the assay as is done by FS-Mol code
         write_jsonl_gz_data(f"data/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list))
 
 if __name__ ==  '__main__':
@@ -319,5 +328,7 @@ if __name__ ==  '__main__':
 
     # Assuming you have a DataFrame named 'df' with the data and 'pchembl_value' as the column
     df = pd.read_csv('bioassay_table_filtered.csv')
+    # Implement initial threshold and get descriptive statistics
     filtered_df = implement_threshold(df, params)
+    # Prepare data into FS-Mol format
     prepare_data(filtered_df, params)
