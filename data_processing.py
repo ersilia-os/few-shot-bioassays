@@ -16,11 +16,11 @@ sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing')
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/utils')
 sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/featurisers')
 
-from clean import *
-from featurise_utils import *
-from molgraph_utils import *
-from save_utils import *
-from featurize import *
+from clean import standardize
+from featurise_utils import compute_sa_score
+from molgraph_utils import molecule_to_graph
+from save_utils import write_jsonl_gz_data
+from featurize import filter_assays
 from rdkit import DataStructs
 from rdkit.Chem import (
     Mol,
@@ -35,21 +35,41 @@ from rdkit.Chem.Descriptors import ExactMolWt, BertzCT
 
 def load_params():
     parser = argparse.ArgumentParser(description='Filtering bioassay arguments.')
-    parser.add_argument('--active_cutoff', type=int, default=6)
-    parser.add_argument('--save', type=bool, default=False)
-    parser.add_argument('--test', type=bool, default=False)
-    parser.add_argument('--num_processes', type=int, default=1)
-    parser.add_argument('--load_metadata', type=str, default='../FS-Mol-Orgs/fs_mol/preprocessing/utils/helper_files')
-    parser.add_argument('--min_size', type=int, default=16)
-    parser.add_argument('--max_size', type=int, default=None)
-    parser.add_argument('--balance_limits', type=int, default=None)
-    parser.add_argument('--sapiens_only', type=bool, default=False)
-    params = parser.parse_args()
+    parser.add_argument('--active_cutoff', type=int, default=6,
+                        help = "The chembl cutoff for active vs inactive classification")
+    parser.add_argument('--save', type=bool, default=False,
+                        help = "Whether or not we want to overwrite the existing csv files")
+    parser.add_argument('--test', type=bool, default=False, 
+                        help = "If test, we run the process_data function on a much smaller dataset")
+    parser.add_argument('--num_processes', type=int, default=1,
+                        help = "The number of processes to use when running FS-Mol functions")
+    parser.add_argument('--load_metadata', type=str, default='../FS-Mol-Orgs/fs_mol/preprocessing/utils/helper_files',
+                        help = "The path to the metadata directory for molecule graph featurization")
+    parser.add_argument('--min_size', type=int, default=16,
+                        help = "The minimum size of the assay (in terms of number of molecules tested")
+    parser.add_argument('--max_size', type=int, default=None,
+                        help = "The maximum size of the assay (in terms of number of molecules tested")
+    parser.add_argument('--balance_limits', type=tuple, default=(0.0, 100.0),
+                        help = "The lower and upper bound for the percentage of the molecules that must be active for the given assay.")
+    parser.add_argument('--max_mol_weight', type=float, default=900.0,
+                        help = "The molecular weight cutoff when cleaning each assay.")
 
+    params = parser.parse_args()
     return params
 
 
-def implement_threshold(df, params):
+def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.DataFrame:
+    """
+        Given a dataframe read from Chembl, we 
+            1. Filter out assays with fewer than min_size molecules
+            2. Add an active/inactive classification for each molecule based on the given threshold
+        Arguments:
+            df: pd.DataFrame containing the data
+            params: argparse.Namespace containing the arguments to the python file
+        Output:
+            filtered_df: pd.DataFrame containing the filtered data
+        
+    """
     # Group by assay
     gp = df.groupby('assay_id')
     x = gp.size()
@@ -81,34 +101,60 @@ def implement_threshold(df, params):
     activity_benchmark = lambda x: True if x > params.active_cutoff else False
     filtered_df['active'] = filtered_df['pchembl_value'].apply(activity_benchmark)
 
+    # Print number of unique targets
+    print("Number of unique targets:", filtered_df['target_pref_name'].nunique())
+
     # Save to new csv
     if params.save:
         filtered_df.to_csv('bioassay_table_filtered_active.csv', index=False)
 
     return filtered_df
 
-def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFrame:
+def clean_assay(df: pd.DataFrame, 
+                assay: str, 
+                csv_writer: csv.DictWriter, 
+                params: argparse.Namespace
+                ) -> pd.DataFrame:
     """
-        Modified from clean_assay in FS-Mol_Orgs/fs_mol/preprocessing/clean.py
-        Called on each assay. 
-        Standardizes the smiles molecules for that assay, and writes a line to
+        Given a dataframe containing data for a single assay, we clean the data by
+            1. Standardizing the smiles string
+            2. Removing > 900 Da moleculare weight
+            3. Get log standard values
+            4. Remove duplicates with conflicting measurements
+        We then write the summary of the assay to summary.csv
+
+        Arguments:
+            df: pd.DataFrame containing data for a single assay
+            assay: str, the assay chembl id
+            csv_writer: csv.DictWriter object to write to summary.csv
+            params: argparse.Namespace containing the arguments of the python file
+        Output:
+            df: pd.DataFrame, the cleaned data
+
+        FS-Mol functions:
+            Standardize: 
+                From FS-Mol_Orgs/fs_mol/preprocessing/clean.py
+                Called on the dataframe and performs cleaning steps 1-4.
+
+        ***Modified from clean_assay in FS-Mol_Orgs/fs_mol/preprocessing/clean.py.
     """
-    # remove index if it was saved with this file (back compatible)
+    # Remove index if it was saved with this file (back compatible)
     if "Unnamed: 0" in df.columns:
         df.drop(columns=["Unnamed: 0"], inplace=True)
 
-    # Since we are grouping by chembl_id, we should drop this
+    # Since we are grouping by chembl_id, we should drop the column (for recombining purposes)
     if 'chembl_id' in df.columns:
         df.drop(columns=['chembl_id'], inplace=True)
 
+    # The original size of the assay
     original_size = len(df)
 
     failed = False
     try:
         print(f"Processing {assay}.")
-        # df = select_assays(df, **DEFAULT_CLEANING)
-        df = standardize(df)
-        # df = apply_thresholds(df, **DEFAULT_CLEANING)
+        # df = select_assays(df, **DEFAULT_CLEANING)                 # FS-Mol_Orgs/fs_mol/preprocessing/clean.py
+        df = standardize(df, max_mol_weight = params.max_mol_weight) # FS-Mol_Orgs/fs_mol/preprocessing/clean.py
+        # df = apply_thresholds(df, **DEFAULT_CLEANING)              # FS-Mol_Orgs/fs_mol/preprocessing/clean.py
     except Exception as e:
         df = None
         print(f"Failed cleaning on {assay} : {e}")
@@ -118,6 +164,7 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
         print(f"Assay {assay} was empty post cleaning.")
         failed = True
 
+    # Create assay dict
     assay_dict = {}
     if failed:
         assay_dict = {
@@ -160,6 +207,7 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
             "standard_units": df.iloc[0]["standard_units"],
         }
 
+    # Write assay_dict as a row in csv
     csv_writer.writerow(assay_dict)
     return df
 
@@ -171,7 +219,24 @@ def smiles_to_rdkit_mol(
     report_fail_as_none: bool = False,
 ) -> Optional[Dict[str, Any]]:
     """
-    Given a datapoint (molecule) with a SMILES string, featurize it as an rdkit_molecule
+        Given a datapoint (molecule) with a SMILES string, featurize it as an rdkit_molecule.
+
+        Arguments:
+            datapoint: Dict[str, Any], the molecule data
+            include_fingerprints: bool, whether or not to include fingerprints
+            include_descriptors: bool, whether or not to include descriptors
+            include_molecule_stats: bool, whether or not to include molecule stats
+            report_fail_as_none: bool, whether or not to report a failed molecule as None
+
+        Output:
+            Dict[str, Any], the processed molecule data with the rdkit_molecule added (or None)
+
+        FS-Mol functions:
+            compute_sa_score:
+                From FS-Mol_Orgs/fs_mol/preprocessing/featurise_utils.py
+                Computes the synthetic accessibility score of a molecule
+
+        ***Adapted from smiles_to_rdkit_mol in FS-Mol_Orgs/fs_mol/preprocessing/featurise_utils.py
     """
     try:
         smiles_string = datapoint["canonical_smiles"]
@@ -201,7 +266,7 @@ def smiles_to_rdkit_mol(
         # Compute molecule-based scores with RDKit:
         if include_molecule_stats:
             datapoint["properties"] = {
-                "sa_score": compute_sa_score(datapoint["mol"]),
+                "sa_score": compute_sa_score(datapoint["mol"]), # FS-Mol_Orgs/fs_mol/preprocessing/featurise_utils.py
                 "clogp": MolLogP(datapoint["mol"]),
                 "mol_weight": ExactMolWt(datapoint["mol"]),
                 "qed": qed(datapoint["mol"]),
@@ -242,9 +307,37 @@ def prepare_data(df, params):
 
         2. Classify proteins and split into tran/test/validation
 
-        3. Featurize the SMILES string to created to create rdkit mol objects and graphs
+        3. Featurization
+            3.1 Use rdkit to obtain molecule objects from the standardized smiles
+            3.2 Use metadata to obtain graph representations of the molecules
 
-        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2 and 3
+        4. Save the data in FS-Mol format
+            For each assay, we have a list of dictionaries where each dictionary represents a molecule post-cleaning and featurization
+            For each assay, save this list of dictionaries in a jsonl.gz file with name the chembl id of the assay.
+
+        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2, 3, and 4.
+
+        Arguments:
+            df: pd.DataFrame, the filtered data
+            params: argparse.Namespace, the arguments to the python file
+
+        Output:
+            None
+            
+        FS-Mol functions:
+            filter_assays:
+                From FS-Mol_Orgs/fs_mol/preprocessing/feauturize.py
+                Uses the summary file to filter out assays that 
+                    1. Are not within min_size and max_size post cleaning
+                    2. Do not have a percentage of active molecules within balance_limits
+
+            molecule_to_graph:
+                From FS-Mol_Orgs/fs_mol/preprocessing/molgraph_utils.py
+                Converts a molecule to a graph representation using the metadata
+                
+            write_jsonl_gz_data:
+                From FS-Mol_Orgs/fs_mol/preprocessing/utils/save_utils.py
+                Writes the 'datapoints' of an assay; i.e. the list of dictionaries representing the molecules to a jsonl.gz file
     """
     # Group dataframe by assay_id
     gb = df.groupby('chembl_id')
@@ -309,6 +402,8 @@ def prepare_data(df, params):
         group = stand_gb.get_group(assay)
         # Transform into a dictionary with keys the columns
         datapoints = group.to_dict('list')
+
+        # We save the featurized molecules as a list of dictionaries
         feat_data_list = []
         for i in range(len(datapoints['smiles'])):
             # Isolate the ith molecule
