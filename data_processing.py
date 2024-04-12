@@ -97,7 +97,7 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
     if "Unnamed: 0" in df.columns:
         df.drop(columns=["Unnamed: 0"], inplace=True)
 
-    # Since we are grouping by assay_id, we should drop this
+    # Since we are grouping by chembl_id, we should drop this
     if 'chembl_id' in df.columns:
         df.drop(columns=['chembl_id'], inplace=True)
 
