@@ -78,7 +78,7 @@ def implement_threshold(df, params):
 
     # For each line of bioassay_table_filtered.csv, 
     # if pchembl_value > cutoff then active = true, otherwise active = false
-    activity_benchmark = lambda x: 'true' if x > params.active_cutoff else 'false'
+    activity_benchmark = lambda x: True if x > params.active_cutoff else False
     filtered_df['active'] = filtered_df['pchembl_value'].apply(activity_benchmark)
 
     # Save to new csv
@@ -151,8 +151,8 @@ def clean_assay(df: pd.DataFrame, assay: str, csv_writer, params) -> pd.DataFram
             "cleaned_size": len(df),
             "cleaning_failed": failed,
             "cleaning_size_delta": original_size - len(df),
-            # "num_pos": df["activity"].sum(),
-            # "percentage_pos": df["activity"].sum() * 100 / len(df),
+            "num_pos": df["active"].sum(),
+            "percentage_pos": df["active"].sum() * 100 / len(df),
             "max_mol_weight": df.iloc[0]["max_molecular_weight"],
             "threshold": params.active_cutoff,
             "max_num_atoms": df.iloc[0]["max_num_atoms"],
@@ -249,7 +249,8 @@ def prepare_data(df, params):
     # Group dataframe by assay_id
     gb = df.groupby('chembl_id')
     if params.test:
-        gb = df.iloc[:10].groupby('chembl_id')
+        df.sort_values('chembl_id', inplace=True)
+        gb = df.iloc[:50].groupby('chembl_id')
 
     # Initialize a summary.csv
     csv_file = open('summary.csv', 'w', newline="")
