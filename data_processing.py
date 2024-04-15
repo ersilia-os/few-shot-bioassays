@@ -133,10 +133,10 @@ def clean_assay(df: pd.DataFrame,
 
         FS-Mol functions:
             Standardize: 
-                From FS-Mol_Orgs/fs_mol/preprocessing/clean.py
+                From ersilia-fsmol/fs_mol/preprocessing/clean.py
                 Called on the dataframe and performs cleaning steps 1-4.
 
-        ***Modified from clean_assay in FS-Mol_Orgs/fs_mol/preprocessing/clean.py.
+        ***Modified from clean_assay in ersilia-fsmol/fs_mol/preprocessing/clean.py.
     """
     # Remove index if it was saved with this file (back compatible)
     if "Unnamed: 0" in df.columns:
@@ -152,9 +152,9 @@ def clean_assay(df: pd.DataFrame,
     failed = False
     try:
         print(f"Processing {assay}.")
-        # df = select_assays(df, **DEFAULT_CLEANING)                 # FS-Mol_Orgs/fs_mol/preprocessing/clean.py
-        df = standardize(df, max_mol_weight = params.max_mol_weight) # FS-Mol_Orgs/fs_mol/preprocessing/clean.py
-        # df = apply_thresholds(df, **DEFAULT_CLEANING)              # FS-Mol_Orgs/fs_mol/preprocessing/clean.py
+        # df = select_assays(df, **DEFAULT_CLEANING)                 # ersilia-fsmol/fs_mol/preprocessing/clean.py
+        df = standardize(df, max_mol_weight = params.max_mol_weight) # ersilia-fsmol/fs_mol/preprocessing/clean.py
+        # df = apply_thresholds(df, **DEFAULT_CLEANING)              # ersilia-fsmol/fs_mol/preprocessing/clean.py
     except Exception as e:
         df = None
         print(f"Failed cleaning on {assay} : {e}")
@@ -233,10 +233,10 @@ def smiles_to_rdkit_mol(
 
         FS-Mol functions:
             compute_sa_score:
-                From FS-Mol_Orgs/fs_mol/preprocessing/featurise_utils.py
+                From ersilia-fsmol/fs_mol/preprocessing/featurise_utils.py
                 Computes the synthetic accessibility score of a molecule
 
-        ***Adapted from smiles_to_rdkit_mol in FS-Mol_Orgs/fs_mol/preprocessing/featurise_utils.py
+        ***Adapted from smiles_to_rdkit_mol in ersilia-fsmol/fs_mol/preprocessing/featurise_utils.py
     """
     try:
         smiles_string = datapoint["canonical_smiles"]
@@ -266,7 +266,7 @@ def smiles_to_rdkit_mol(
         # Compute molecule-based scores with RDKit:
         if include_molecule_stats:
             datapoint["properties"] = {
-                "sa_score": compute_sa_score(datapoint["mol"]), # FS-Mol_Orgs/fs_mol/preprocessing/featurise_utils.py
+                "sa_score": compute_sa_score(datapoint["mol"]), # ersilia-fsmol/fs_mol/preprocessing/featurise_utils.py
                 "clogp": MolLogP(datapoint["mol"]),
                 "mol_weight": ExactMolWt(datapoint["mol"]),
                 "qed": qed(datapoint["mol"]),
@@ -326,17 +326,17 @@ def prepare_data(df, params):
             
         FS-Mol functions:
             filter_assays:
-                From FS-Mol_Orgs/fs_mol/preprocessing/feauturize.py
+                From ersilia-fsmol/fs_mol/preprocessing/feauturize.py
                 Uses the summary file to filter out assays that 
                     1. Are not within min_size and max_size post cleaning
                     2. Do not have a percentage of active molecules within balance_limits
 
             molecule_to_graph:
-                From FS-Mol_Orgs/fs_mol/preprocessing/molgraph_utils.py
+                From ersilia-fsmol/fs_mol/preprocessing/molgraph_utils.py
                 Converts a molecule to a graph representation using the metadata
                 
             write_jsonl_gz_data:
-                From FS-Mol_Orgs/fs_mol/preprocessing/utils/save_utils.py
+                From ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
                 Writes the 'datapoints' of an assay; i.e. the list of dictionaries representing the molecules to a jsonl.gz file
     """
     # Group dataframe by assay_id
