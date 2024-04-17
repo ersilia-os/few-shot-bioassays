@@ -143,11 +143,8 @@ def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.Data
     if params.save: 
         plt.savefig('pchebml_value_histogram.png')
 
-    # For each line of bioassay_table_filtered.csv, 
-    # if pchembl_value > cutoff then active = true, otherwise active = false
-
+    # Apply thresholding function
     filtered_df = filtered_df.groupby("chembl_id").apply(threshold_helper)
-
     # Print number of unique targets
     print("Number of unique targets:", filtered_df['target_pref_name'].nunique())
 
