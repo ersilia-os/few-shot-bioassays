@@ -1,11 +1,10 @@
 import sys
-import logging
 import argparse
 import csv
 import pandas as pd
 import numpy as np
-import functools
 import matplotlib.pyplot as plt
+from typing import Dict, Any, Optional
 from dpu_utils.utils import run_and_debug, RichPath
 
 # Silence pandas warnings
@@ -35,8 +34,6 @@ from rdkit.Chem.Descriptors import ExactMolWt, BertzCT
 
 def load_params():
     parser = argparse.ArgumentParser(description='Filtering bioassay arguments.')
-    parser.add_argument('--active_cutoff', type=int, default=6,
-                        help = "The chembl cutoff for active vs inactive classification")
     parser.add_argument('--save', type=bool, default=False,
                         help = "Whether or not we want to overwrite the existing csv files")
     parser.add_argument('--test', type=bool, default=False, 
@@ -49,13 +46,63 @@ def load_params():
                         help = "The minimum size of the assay (in terms of number of molecules tested")
     parser.add_argument('--max_size', type=int, default=None,
                         help = "The maximum size of the assay (in terms of number of molecules tested")
-    parser.add_argument('--balance_limits', type=tuple, default=(0.0, 100.0),
+    parser.add_argument('--balance_limits', type=tuple, default=(10.0, 90.0),
                         help = "The lower and upper bound for the percentage of the molecules that must be active for the given assay.")
     parser.add_argument('--max_mol_weight', type=float, default=900.0,
                         help = "The molecular weight cutoff when cleaning each assay.")
 
     params = parser.parse_args()
     return params
+
+def threshold_helper(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Apply autothesholding procedure to each assay:
+
+    1) Find the median for an assay
+    2) Use the median as a threshold if 5 <= median(pchembl) <= 6. 
+    If below round up to 5, if above round down to 6.
+    3) Apply the threshold to the data series.
+
+    For activity measurements, pchembl value is used.
+        *This is opposed to FS-Mol which uses log standard value*
+
+    Arguments:
+        df: pd.DataFrame containing the data for a single assay
+
+    Output:
+        df: pd.DataFrame containing the data for a single assay with the active/inactive classification and threshold value
+
+    ***Modified from autothreshold in ersilia-fsmol/fs_mol/preprocessing/utils/clean_utils.py.
+    """
+
+    # Remove index if it was saved with this file (back compatible)
+    if "Unnamed: 0" in df.columns:
+        df.drop(columns=["Unnamed: 0"], inplace=True)
+
+    # Since we are grouping by chembl_id, we should drop the column (for recombining purposes)
+    if 'chembl_id' in df.columns:
+        df.drop(columns=['chembl_id'], inplace=True)
+
+
+    # Set threshold limits
+    threshold_limits = (5, 6)
+    # Get median
+    median = df["pchembl_value"].median()
+    threshold = median
+
+    # Round median to closest acceptable value
+    if median < threshold_limits[0]:
+        threshold = 5.0
+    elif median > threshold_limits[1]:
+        threshold = 6.0
+
+    # Create active/inactive classification
+    activity_benchmark = lambda x: True if x > threshold else False
+    df['active'] = df['pchembl_value'].apply(activity_benchmark)
+    # And save assay threshold
+    df['assay_threshold'] = threshold
+
+    return df
 
 
 def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.DataFrame:
@@ -98,8 +145,8 @@ def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.Data
 
     # For each line of bioassay_table_filtered.csv, 
     # if pchembl_value > cutoff then active = true, otherwise active = false
-    activity_benchmark = lambda x: True if x > params.active_cutoff else False
-    filtered_df['active'] = filtered_df['pchembl_value'].apply(activity_benchmark)
+
+    filtered_df = filtered_df.groupby("chembl_id").apply(threshold_helper)
 
     # Print number of unique targets
     print("Number of unique targets:", filtered_df['target_pref_name'].nunique())
@@ -201,7 +248,7 @@ def clean_assay(df: pd.DataFrame,
             "num_pos": df["active"].sum(),
             "percentage_pos": df["active"].sum() * 100 / len(df),
             "max_mol_weight": df.iloc[0]["max_molecular_weight"],
-            "threshold": params.active_cutoff,
+            "threshold": df.iloc[0]["assay_threshold"],
             "max_num_atoms": df.iloc[0]["max_num_atoms"],
             "confidence_score": df.iloc[0]["confidence_score"],
             "standard_units": df.iloc[0]["standard_units"],
@@ -417,7 +464,7 @@ def prepare_data(df, params):
             feat_data_list.append(featurized_datapoint)
         
         # Store all the information for the assay as is done by FS-Mol code
-        write_jsonl_gz_data(f"data/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
+        write_jsonl_gz_data(f"dataset/temp/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
 
 if __name__ ==  '__main__':
     # Load parameters
