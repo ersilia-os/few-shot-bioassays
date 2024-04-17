@@ -12,9 +12,9 @@ from dpu_utils.utils import run_and_debug, RichPath
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing')
-sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/utils')
-sys.path.append('../FS-Mol-Orgs/fs_mol/preprocessing/featurisers')
+sys.path.append('../ersilia-fsmol/fs_mol/preprocessing')
+sys.path.append('../ersilia-fsmol/fs_mol/preprocessing/utils')
+sys.path.append('../ersilia-fsmol/fs_mol/preprocessing/featurisers')
 
 from clean import standardize
 from featurise_utils import compute_sa_score
@@ -239,6 +239,7 @@ def smiles_to_rdkit_mol(
         ***Adapted from smiles_to_rdkit_mol in ersilia-fsmol/fs_mol/preprocessing/featurise_utils.py
     """
     try:
+        # Use canonical smiles as opposed to smiles as done in FS-Mol
         smiles_string = datapoint["canonical_smiles"]
         rdkit_mol = MolFromSmiles(smiles_string)
 
@@ -373,7 +374,7 @@ def prepare_data(df, params):
     csv_file.close()
 
     # Refilter assays after cleaning
-    assays_to_process = filter_assays('summary.csv', params)
+    assays_to_process = filter_assays('summary.csv', params) # ersilia-fsmol/fs_mol/preprocessing/feauturize.py
     print("After additional cleaning, we have", len(assays_to_process), "unique assays.")
 
     # Load metadata for featurizations
@@ -411,12 +412,12 @@ def prepare_data(df, params):
             # Add rdkit_molecule information
             featurized_datapoint = smiles_to_rdkit_mol(datapoint)
             # And also represent it as a graph using the metadata
-            datapoint["graph"] = molecule_to_graph(datapoint["mol"], atom_feature_extractors)
+            datapoint["graph"] = molecule_to_graph(datapoint["mol"], atom_feature_extractors) # ersilia-fsmol/fs_mol/preprocessing/molgraph_utils.py
             # Append to it to our list of featurized datapoints
             feat_data_list.append(featurized_datapoint)
         
         # Store all the information for the assay as is done by FS-Mol code
-        write_jsonl_gz_data(f"data/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list))
+        write_jsonl_gz_data(f"data/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
 
 if __name__ ==  '__main__':
     # Load parameters
