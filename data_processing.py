@@ -50,7 +50,12 @@ def load_params():
                         help = "The lower and upper bound for the percentage of the molecules that must be active for the given assay.")
     parser.add_argument('--max_mol_weight', type=float, default=900.0,
                         help = "The molecular weight cutoff when cleaning each assay.")
-
+    parser.add_argument('--sapiens_only', type=bool, default=False,
+                        help = "SHOULD NOT BE CHANGED. Used in a call to an FS-Mol function.")
+    parser.add_argument('--test_size_absolute', type=int, default=200,
+                        help = "The size of the test set in terms of absolute assays.")
+    parser.add_argument('--val_percentage', type=float, default=0.2,
+                        help = "Percentage of non-test assays that should be used as validation.")
     params = parser.parse_args()
     return params
 
@@ -103,7 +108,6 @@ def threshold_helper(df: pd.DataFrame) -> pd.DataFrame:
     df['assay_threshold'] = threshold
 
     return df
-
 
 def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.DataFrame:
     """
@@ -227,6 +231,7 @@ def clean_assay(df: pd.DataFrame,
             "max_num_atoms": "NaN",
             "confidence_score": "NaN",
             "standard_units": "NaN",
+            "year": "NaN"
         }
 
     else:
@@ -249,11 +254,61 @@ def clean_assay(df: pd.DataFrame,
             "max_num_atoms": df.iloc[0]["max_num_atoms"],
             "confidence_score": df.iloc[0]["confidence_score"],
             "standard_units": df.iloc[0]["standard_units"],
+            "year": df.iloc[0]["year"]
         }
 
     # Write assay_dict as a row in csv
     csv_writer.writerow(assay_dict)
     return df
+
+def split_assays(summary, params) -> tuple:
+    """
+        Given a dataframe containing the data, we split the data into train, validation, and test sets.
+
+        Arguments:
+            df: pd.DataFrame, the data
+            params: argparse.Namespace, the arguments to the python file
+        Output:
+            train_assays: list, the list of assays for training
+            val_assays: list, the list of assays for validation
+            test_assays: list, the list of assays for testing
+    """
+    # Read summary csv
+    sdf = pd.read_csv(summary)
+
+    # Keep only organisms that have been seen twice
+    repeat_targets = sdf.groupby('target_id').filter(lambda x: len(x) > 1)
+    unique_targets = sdf.groupby('target_id').filter(lambda x: len(x) == 1)
+
+    # Dataframe is already sorted, keep first (newest) instance of each duplicated target and add to test list
+    test_repeat_df = repeat_targets.loc[repeat_targets.sort_values('year', ascending=False).duplicated(subset='target_id', keep='first') == False]
+    # Drop test assays from dataframe
+    sdf.drop(test_repeat_df.index, inplace=True)
+    # And store list of test assays. Given current dataset this is 75 assays
+    test_list = test_repeat_df["chembl_id"].tolist()
+
+    if len(test_list) < params.test_size_absolute:
+        # If test set is not big enough. Add the most recent half of the unique assays.
+        print("After using last assay for each duplicate target, test set not big enough")
+        test_unique_df = unique_targets.sort_values('year', ascending=False).head(len(unique_targets) // 2)
+        sdf.drop(test_unique_df.index, inplace=True)
+        test_list += test_unique_df["chembl_id"].tolist()
+
+        if len(test_list) < params.test_size_absolute:
+            # If after adding half of unique tests, still not big enough, then add most recent assays until fill
+            print("After using half of unique targets, test set not big enough")
+            test_recent_df = sdf.sort_values('year', ascending=False).head(params.test_size_absolute - len(test_list))
+            sdf.drop(test_recent_df.index, inplace=True)
+            test_list += test_recent_df["chembl_id"].tolist()
+
+    # Split remaining assays into train and validation
+    sdf.sort_values('year', ascending=False, inplace = True)
+    val_df, train_df = sdf.iloc[:int(len(sdf) * params.val_percentage)], sdf.iloc[int(len(sdf) * params.val_percentage):]
+    val_list, train_list = val_df["chembl_id"].tolist(), train_df["chembl_id"].tolist()
+    assert(set(val_list).isdisjoint(set(train_list)))
+    assert(set(val_list).isdisjoint(set(test_list)))
+    assert(set(train_list).isdisjoint(set(test_list)))
+    return train_list, val_list, test_list 
 
 def smiles_to_rdkit_mol(
     datapoint,
@@ -391,7 +446,7 @@ def prepare_data(df, params):
         gb = df.iloc[:50].groupby('chembl_id')
 
     # Initialize a summary.csv
-    csv_file = open('summary.csv', 'w', newline="")
+    csv_file = open("summary.csv", 'w', newline="")
     fieldnames = [
         "chembl_id",
         "target_id",
@@ -408,6 +463,7 @@ def prepare_data(df, params):
         "max_num_atoms",
         "confidence_score",
         "standard_units",
+        "year",
     ]
     csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     csv_writer.writeheader()
@@ -420,6 +476,11 @@ def prepare_data(df, params):
     # Refilter assays after cleaning
     assays_to_process = filter_assays('summary.csv', params) # ersilia-fsmol/fs_mol/preprocessing/feauturize.py
     print("After additional cleaning, we have", len(assays_to_process), "unique assays.")
+
+    # At this point, all assays are in the assays_to_process list.
+    train_assays, val_assays, test_assays = split_assays(standardize_df, 'summary.csv') 
+
+    assert(False)
 
     # Load metadata for featurizations
     if params.load_metadata:
@@ -456,7 +517,7 @@ def prepare_data(df, params):
             # Add rdkit_molecule information
             featurized_datapoint = smiles_to_rdkit_mol(datapoint)
             # And also represent it as a graph using the metadata
-            datapoint["graph"] = molecule_to_graph(datapoint["mol"], atom_feature_extractors) # ersilia-fsmol/fs_mol/preprocessing/molgraph_utils.py
+            datapoint["graph"] = molecule_to_graph(datapoint["mol"], atom_feature_extractors) # ersilia-fsmol/fs_mol/preprocessing/featurisers/molgraph_utils.py
             # Append to it to our list of featurized datapoints
             feat_data_list.append(featurized_datapoint)
         

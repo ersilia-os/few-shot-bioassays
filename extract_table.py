@@ -30,6 +30,8 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 				canonical_smiles
 			from activities:
 				pchembl_value
+			from docs:
+				year (of study publication)
 		We join tables as:
 			target_dictionary and assays based on target_id (tid)
 			assays and organism_class based on taxonomy_id (assay_tax_id/tax_id)
@@ -62,13 +64,15 @@ def chembl_activity_target(db_user, db_password, db_name='chembl_33',
 			act.pchembl_value,
 			act.standard_value,
 			act.standard_units,
-			act.standard_relation
+			act.standard_relation,
+			docs.year
 		FROM target_dictionary td
 		INNER JOIN assays a ON td.tid = a.tid
 		INNER JOIN organism_class oct ON a.assay_tax_id = oct.tax_id
 		INNER JOIN activities act ON a.assay_id = act.assay_id
 		INNER JOIN molecule_dictionary md ON act.molregno = md.molregno
 		INNER JOIN compound_structures cnd_s ON md.molregno = cnd_s.molregno
+		INNER JOIN docs ON a.doc_id = docs.doc_id
 		WHERE act.pchembl_value > 0
 		AND oct.l1 IN ('Bacteria', 'Viruses', 'Fungi')
 		AND td.target_type = 'ORGANISM'
