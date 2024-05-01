@@ -1,3 +1,5 @@
+#TODO removed CHEMBL1614414 bc 8000 molecules -- figure out how to subsample
+
 import sys
 import argparse
 import csv
