@@ -7,6 +7,7 @@
 ## Code
 `extract_table.py`: Performs the Chembl query and generates `bioassay_table_filtered.csv`.<br>
 `data_processing.py`: Saves the assay information queried from Chembl in FS-Mol format.<br>
+`create_dataset_list.py`: Simple function for creating a list of all CHEMBL data in train, valid, and test.<br>
 `utils/*`: Debugging and dataset exmaination methods
 
 ## Data
