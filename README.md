@@ -23,3 +23,6 @@
 
 All code should be the same except notebook.ipynb which is optimized for the supercloud environment on supercloud, and for Andrew's environment on the local ersilia-fsmol directory. Results are most up to date on Supercloud.
 
+## To-Do:
+
+Despite our data pre-processing, we sometimes skip entire assays for the min_size_04 dataset. This is because the model wants the context set to hveave at least two samples from each class (positive or negative), and with a context size of 4 this is difficult.  
