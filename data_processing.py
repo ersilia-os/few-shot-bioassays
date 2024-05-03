@@ -155,7 +155,7 @@ def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.Data
     plt.ylabel('Frequency')
     plt.title('Histogram of pchembl_value')
     if params.save: 
-        plt.savefig(f'pchebml_value_histogram_min_size_{min(params.min_size_list)}.png')
+        plt.savefig("pchebml_value_histogram_min_size_{:02d}.png".format(min(params.min_size_list)))
 
     # Apply thresholding function
     filtered_df = filtered_df.groupby("chembl_id").apply(threshold_helper)
@@ -167,10 +167,10 @@ def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.Data
           )
 
     # Save to new csv
-    # if params.save:
-        # filtered_df.to_csv('bioassay_table_filtered_active.csv', index=False)
+    if params.save:
+        filtered_df.to_csv('bioassay_table_filtered_active.csv', index=False)
 
-    # return filtered_df
+    return filtered_df
 
 def clean_assay(df: pd.DataFrame, 
                 assay: str, 
@@ -457,6 +457,7 @@ def prepare_data(df, params):
             df.sort_values('chembl_id', inplace=True)
             gb = df.iloc[:500].groupby('chembl_id')
 
+        assert(False)
         # Initialize a summary.csv
         csv_file = open("summary.csv", 'w', newline="")
         fieldnames = [
@@ -539,7 +540,7 @@ def prepare_data(df, params):
                     feat_data_list.append(featurized_datapoint)
                 
                 # Store all the information for the assay as is done by FS-Mol code
-                write_jsonl_gz_data(f"dataset/min_size_{min_size}/{folder_name}/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
+                write_jsonl_gz_data(f"dataset/min_size_{min_size:02d}/{folder_name}/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
 
 if __name__ ==  '__main__':
     # Load parameters
