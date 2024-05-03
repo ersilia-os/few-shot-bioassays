@@ -452,12 +452,12 @@ def prepare_data(df, params):
     """
     if not params.load_from_csv:
         # Group dataframe by assay_id
-        gb = df.groupby('chembl_id')
+        for i, group in gb:
+            print(i, group)
         if params.test_run:
             df.sort_values('chembl_id', inplace=True)
             gb = df.iloc[:500].groupby('chembl_id')
 
-        assert(False)
         # Initialize a summary.csv
         csv_file = open("summary.csv", 'w', newline="")
         fieldnames = [
@@ -551,4 +551,4 @@ if __name__ ==  '__main__':
     # Implement initial threshold and get descriptive statistics
     filtered_df = implement_threshold(df, params)
     # Prepare data into FS-Mol format
-    # prepare_data(filtered_df, params)
+    prepare_data(filtered_df, params)

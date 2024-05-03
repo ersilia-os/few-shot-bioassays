@@ -1,0 +1,201 @@
+chembl_id,assay_id,target_type,target_pref_name,target_id,assay_organism,assay_type,confidence_score,organism_taxonomy_l1,organism_taxonomy_l2,organism_taxonomy_l3,raw_size,cleaned_size,cleaning_failed,cleaning_size_delta,num_pos,percentage_pos,max_mol_weight,threshold,max_num_atoms,standard_units,year
+CHEMBL1033643,576333,ORGANISM,rhinovirus A1B,50622,Human rhinovirus 1B,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,19.0,19,False,0.0,9.0,47.36842105263158,309.192,5.87,20.0,nM,2009.0
+CHEMBL1033992,540540,ORGANISM,Human herpesvirus 1,50602,Human herpesvirus 1,F,1,Viruses,dsDNA,,38.0,37,False,1.0,31.0,83.78378378378379,403.2210000000001,6.0,25.0,nM,2009.0
+CHEMBL1033993,540541,ORGANISM,Human herpesvirus 2,50515,Human herpesvirus 2,F,1,Viruses,dsDNA,,38.0,37,False,1.0,33.0,89.1891891891892,403.2210000000001,6.0,25.0,nM,2009.0
+CHEMBL1034004,540552,ORGANISM,Human rhinovirus sp.,50085,Human rhinovirus sp.,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,21.0,21,False,0.0,15.0,71.42857142857143,610.6140000000001,6.0,44.0,nM,2009.0
+CHEMBL1107216,623654,ORGANISM,Human coxsackievirus B2,101843,Coxsackievirus B2 (strain Ohio-1),F,1,Viruses,ssRNA,,42.0,42,False,0.0,15.0,35.714285714285715,613.7280000000001,5.0,45.0,nM,2010.0
+CHEMBL1960329,806687,ORGANISM,Trichophyton mentagrophytes,102121,Trichophyton mentagrophytes,F,1,Fungi,Ascomycota,Eurotiomycetes,28.0,28,False,0.0,23.0,82.14285714285714,554.764,6.0,34.0,nM,2012.0
+CHEMBL2021151,814632,ORGANISM,Candida albicans,50442,Candida albicans,F,1,Fungi,Ascomycota,Saccharomycetales,20.0,20,False,0.0,10.0,50.0,422.4320000000002,5.65,29.0,nM,2012.0
+CHEMBL2037882,822850,ORGANISM,Human herpesvirus 5,50530,Human herpesvirus 5,F,1,Viruses,dsDNA,,18.0,18,False,0.0,9.0,50.0,391.54100000000017,5.405,27.0,nM,2012.0
+CHEMBL2061397,829839,ORGANISM,Measles virus,50650,Measles virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,25.0,25,False,0.0,12.0,48.0,532.5410000000002,5.42,36.0,nM,2012.0
+CHEMBL2328235,938153,ORGANISM,Lassa virus,102519,Lassa virus,F,1,Viruses,ssRNA,,47.0,47,False,0.0,42.0,89.36170212765957,525.6740000000003,6.0,38.0,nM,2013.0
+CHEMBL2330536,941545,ORGANISM,Vaccinia virus WR,102132,Vaccinia virus WR,F,1,Viruses,dsDNA,,32.0,32,False,0.0,6.0,18.75,393.3390000000002,5.0,25.0,nM,2013.0
+CHEMBL2439555,987687,ORGANISM,Human coxsackievirus B6,101844,Human coxsackievirus B6,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,33.0,33,False,0.0,16.0,48.48484848484848,370.4050000000001,5.16,27.0,nM,2013.0
+CHEMBL2444082,990766,ORGANISM,Filobasidiella neoformans,50436,Cryptococcus neoformans,F,1,Fungi,Basidiomycota,Tremellomycetes,74.0,37,False,37.0,20.0,54.054054054054056,610.4430000000004,6.0,34.0,nM,2013.0
+CHEMBL3047384,899484,ORGANISM,Simian immunodeficiency virus,50609,Simian immunodeficiency virus,F,1,Viruses,retro-transcribing,,22.0,22,False,0.0,11.0,50.0,542.6530000000002,5.109999999999999,39.0,nM,2011.0
+CHEMBL3282587,1357013,ORGANISM,Enterococcus faecium,50266,Enterococcus faecium,F,1,Bacteria,Gram-Positive,Enterococcus,23.0,23,False,0.0,16.0,69.56521739130434,458.60800000000006,6.0,33.0,nM,1977.0
+CHEMBL3282590,1357016,ORGANISM,Lactobacillus casei,50362,Lactobacillus casei,F,1,Bacteria,Gram-Positive,Lactobacillus,26.0,26,False,0.0,13.0,50.0,469.631,5.395,33.0,nM,1977.0
+CHEMBL3385546,1439145,ORGANISM,Mycobacterium bovis BCG,102520,Mycobacterium bovis BCG,F,1,Bacteria,Gram-Positive,Mycobacterium,34.0,34,False,0.0,17.0,50.0,498.53900000000016,5.555,37.0,nM,2014.0
+CHEMBL3389955,1433310,ORGANISM,Dengue virus,50676,Dengue virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,23.0,23,False,0.0,11.0,47.82608695652174,432.45500000000015,5.05,32.0,nM,2014.0
+CHEMBL3428285,1477687,ORGANISM,Coxsackievirus,50666,Coxsackievirus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,42.0,42,False,0.0,18.0,42.85714285714285,582.3800000000001,5.0,33.0,nM,2015.0
+CHEMBL3588716,1500292,ORGANISM,Human immunodeficiency virus type 2 (ISOLATE ROD),106996,Human immunodeficiency virus type 2 (ISOLATE ROD),F,1,Viruses,retro-transcribing,,22.0,22,False,0.0,14.0,63.63636363636363,809.0499999999997,6.0,58.0,nM,2015.0
+CHEMBL3738055,1537876,ORGANISM,Human coxsackievirus B5,50618,Human coxsackievirus B5,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,18.0,18,False,0.0,7.0,38.888888888888886,511.5480000000001,5.0,37.0,nM,2015.0
+CHEMBL3738670,1539598,ORGANISM,Bovine viral diarrhea virus,100497,Bovine viral diarrhea virus 1,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,19.0,19,False,0.0,8.0,42.10526315789474,403.9130000000002,5.22,29.0,nM,2015.0
+CHEMBL3796292,1571900,ORGANISM,Mycobacterium tuberculosis H37Rv,104907,Mycobacterium tuberculosis H37Rv,F,1,Bacteria,Gram-Positive,Mycobacterium,25.0,25,False,0.0,12.0,48.0,822.9530000000003,5.43,59.0,nM,2016.0
+CHEMBL3813389,1581091,ORGANISM,Human herpesvirus 5 strain AD169,50517,Human herpesvirus 5 strain AD169,F,1,Viruses,dsDNA,,18.0,18,False,0.0,11.0,61.11111111111112,530.4750000000001,6.0,35.0,nM,2016.0
+CHEMBL3994799,1645743,ORGANISM,Human herpesvirus 3,50527,Human herpesvirus 3,F,1,Viruses,dsDNA,,23.0,23,False,0.0,6.0,26.08695652173913,595.5640000000002,5.0,42.0,nM,2017.0
+CHEMBL3999677,1650543,ORGANISM,Dengue virus 3,101768,Dengue virus 3,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,32.0,32,False,0.0,20.0,62.5,515.4540000000002,6.0,36.0,nM,2017.0
+CHEMBL3999678,1650544,ORGANISM,Dengue virus type 4,50639,Dengue virus 4,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,32.0,32,False,0.0,16.0,50.0,515.4540000000002,5.87,36.0,nM,2017.0
+CHEMBL4003204,1653838,ORGANISM,Norovirus,118658,Norovirus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,32.0,32,False,0.0,16.0,50.0,650.7080000000004,5.805,43.0,nM,2017.0
+CHEMBL4012802,1663121,ORGANISM,Human poliovirus 3,50620,Human poliovirus 3,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,27.0,27,False,0.0,15.0,55.55555555555556,432.5010000000001,6.0,31.0,nM,2017.0
+CHEMBL4019380,1669492,ORGANISM,Human herpesvirus 1 strain KOS,107165,Human herpesvirus 1 strain KOS,F,1,Viruses,dsDNA,,25.0,21,False,4.0,9.0,42.85714285714285,893.8279999999997,5.7,62.0,nM,2017.0
+CHEMBL4019381,1669493,ORGANISM,Human herpesvirus 2 strain G,106886,Human herpesvirus 2 strain G,F,1,Viruses,dsDNA,,24.0,21,False,3.0,9.0,42.85714285714285,893.8279999999997,5.56,62.0,nM,2017.0
+CHEMBL4019385,1669497,ORGANISM,Human herpesvirus 3 strain Oka vaccine,106998,Human herpesvirus 3 strain Oka vaccine,F,1,Viruses,dsDNA,,35.0,22,False,13.0,12.0,54.54545454545455,893.8279999999997,5.02,62.0,nM,2017.0
+CHEMBL4054625,1703392,ORGANISM,Influenza B virus,50523,influenza B virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,26.0,26,False,0.0,13.0,50.0,353.27,5.375,24.0,nM,2017.0
+CHEMBL4135013,1720013,ORGANISM,Yellow fever virus,50642,Yellow fever virus 17D,F,1,Viruses,ssRNA,,27.0,27,False,0.0,9.0,33.333333333333336,518.0380000000001,5.72,36.0,nM,2017.0
+CHEMBL4143827,1728549,ORGANISM,Chlamydia trachomatis,50243,Chlamydia trachomatis,F,1,Bacteria,Gram-Negative,Other,40.0,20,False,20.0,6.0,30.0,377.443,5.0,29.0,nM,2018.0
+CHEMBL4145237,1729959,ORGANISM,HBV genotype D,101829,HBV genotype D,F,1,Viruses,retro-transcribing,,64.0,64,False,0.0,32.0,50.0,426.5130000000002,5.925,30.0,nM,2018.0
+CHEMBL4197818,1762571,ORGANISM,Ebolavirus,118702,Ebolavirus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,25.0,25,False,0.0,10.0,40.0,441.4240000000003,5.0,29.0,nM,2018.0
+CHEMBL4199670,1764423,ORGANISM,Human rhinovirus 21,50757,Human rhinovirus A21,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,22.0,22,False,0.0,14.0,63.63636363636363,434.399,6.0,30.0,nM,2018.0
+CHEMBL4222852,1770740,ORGANISM,Ajellomyces capsulatus,50272,Histoplasma capsulatum G217B,F,1,Fungi,Ascomycota,Eurotiomycetes,23.0,23,False,0.0,16.0,69.56521739130434,392.52400000000006,6.0,28.0,nM,2018.0
+CHEMBL4262058,1790139,ORGANISM,Influenza A virus (A/PR/8/34(H1N1)),50142,Influenza A virus (A/Puerto Rico/8/1934(H1N1)),F,1,Viruses,ssRNA,ssRNA negative-strand viruses,21.0,21,False,0.0,10.0,47.61904761904762,337.54800000000006,5.08,24.0,nM,2017.0
+CHEMBL4305759,1806400,ORGANISM,Dengue virus 2,101767,Dengue virus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,25.0,25,False,0.0,12.0,48.0,409.46700000000016,5.38,29.0,nM,2019.0
+CHEMBL4314447,1814873,ORGANISM,Hepatitis C virus,50643,Hepatitis C virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,39.0,39,False,0.0,10.0,25.64102564102564,463.5750000000004,5.0,32.0,nM,2019.0
+CHEMBL4315144,1815570,ORGANISM,Middle East respiratory syndrome-related coronavirus,118652,Middle East respiratory syndrome coronavirus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,18.0,18,False,0.0,11.0,61.11111111111112,463.6700000000002,6.0,30.0,nM,2019.0
+CHEMBL4316106,1816532,ORGANISM,Human adenovirus type 5,50712,Human adenovirus 5,F,1,Viruses,dsDNA,,19.0,19,False,0.0,9.0,47.36842105263158,551.556,5.64,38.0,nM,2020.0
+CHEMBL4316462,1816888,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,36.0,36,False,0.0,22.0,61.11111111111112,661.549,6.0,43.0,nM,2020.0
+CHEMBL4316463,1816889,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,33.0,33,False,0.0,26.0,78.78787878787878,661.549,6.0,43.0,nM,2020.0
+CHEMBL4328847,1828973,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,29.0,29,False,0.0,14.0,48.27586206896552,586.5410000000002,5.72,43.0,nM,2019.0
+CHEMBL4328848,1828974,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,28.0,28,False,0.0,14.0,50.0,586.5410000000002,5.66,43.0,nM,2019.0
+CHEMBL4335367,1835234,ORGANISM,Hepatitis C virus,50643,Hepatitis C virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,35.0,35,False,0.0,17.0,48.57142857142857,526.5870000000001,5.98,39.0,nM,2019.0
+CHEMBL4339813,1839598,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,53.0,53,False,0.0,46.0,86.79245283018868,473.49300000000034,6.0,35.0,nM,2019.0
+CHEMBL4345984,1845557,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,37.0,36,False,1.0,18.0,50.0,881.4080000000001,5.31,62.0,nM,2020.0
+CHEMBL4349578,1849037,ORGANISM,Hepatitis C virus,50643,Hepatitis C virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,20.0,19,False,1.0,16.0,84.21052631578948,895.0390000000002,6.0,63.0,nM,2019.0
+CHEMBL4352819,1852195,ORGANISM,Human enterovirus 71,50746,Enterovirus A71,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,22.0,22,False,0.0,13.0,59.09090909090909,566.5390000000002,6.0,42.0,nM,2019.0
+CHEMBL4369263,1868197,ORGANISM,Porphyromonas gingivalis,50177,Porphyromonas gingivalis,F,1,Bacteria,Gram-Negative,Other,37.0,37,False,0.0,12.0,32.432432432432435,730.5660000000001,5.0,54.0,nM,2019.0
+CHEMBL4370013,1868947,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,30.0,30,False,0.0,26.0,86.66666666666667,592.7270000000003,6.0,43.0,nM,2019.0
+CHEMBL4372506,1871339,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,37.0,37,False,0.0,17.0,45.94594594594594,435.2850000000001,5.8,28.0,nM,2019.0
+CHEMBL4399377,1897342,ORGANISM,Staphylococcus aureus,50185,Staphylococcus aureus,F,1,Bacteria,Gram-Positive,Staphylococcus,19.0,19,False,0.0,9.0,47.36842105263158,602.532,5.82,41.0,nM,2019.0
+CHEMBL4400278,1898243,ORGANISM,Zika virus,118686,Zika virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,37.0,37,False,0.0,27.0,72.97297297297297,455.3500000000001,6.0,24.0,nM,2019.0
+CHEMBL4404352,1902130,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus type 1,F,1,Viruses,retro-transcribing,,38.0,38,False,0.0,17.0,44.73684210526316,453.4900000000002,5.92,31.0,nM,2020.0
+CHEMBL4404536,1902314,ORGANISM,Human adenovirus type 5,50712,Human adenovirus 5,F,1,Viruses,dsDNA,,41.0,41,False,0.0,20.0,48.78048780487805,530.8520000000001,5.88,36.0,nM,2020.0
+CHEMBL4404616,1902394,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,27.0,27,False,0.0,20.0,74.07407407407408,610.6860000000001,6.0,45.0,nM,2020.0
+CHEMBL4415075,1912492,ORGANISM,Dengue virus 1,101766,Dengue virus 1,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,26.0,26,False,0.0,13.0,50.0,630.6200000000003,5.640000000000001,44.0,nM,2019.0
+CHEMBL4434379,1931128,ORGANISM,Human herpesvirus 4,50518,Human herpesvirus 4,F,1,Viruses,dsDNA,,18.0,18,False,0.0,11.0,61.11111111111112,520.4600000000002,6.0,37.0,nM,2019.0
+CHEMBL4606620,1973802,ORGANISM,Hepatitis B virus,50606,Hepatitis B virus,F,1,Viruses,retro-transcribing,,47.0,47,False,0.0,36.0,76.59574468085107,509.40100000000007,6.0,34.0,nM,2020.0
+CHEMBL4615220,1981958,ORGANISM,Hepatitis C virus,50643,Hepatitis C virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,39.0,39,False,0.0,25.0,64.1025641025641,679.8629999999999,6.0,49.0,nM,2020.0
+CHEMBL4616075,1982813,ORGANISM,Chikungunya virus,118637,Chikungunya virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,33.0,33,False,0.0,8.0,24.24242424242424,487.3670000000001,5.0,30.0,nM,2020.0
+CHEMBL4616145,1982883,ORGANISM,Dengue virus 2,101767,Dengue virus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,19.0,19,False,0.0,9.0,47.36842105263158,830.8230000000002,5.57,58.0,nM,2020.0
+CHEMBL4618924,1985518,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,25.0,25,False,0.0,20.0,80.0,601.6880000000006,6.0,41.0,nM,2020.0
+CHEMBL4622140,1988593,ORGANISM,Hepatitis B virus,50606,Hepatitis B virus,F,1,Viruses,retro-transcribing,,26.0,26,False,0.0,19.0,73.07692307692308,491.9100000000002,6.0,35.0,nM,2020.0
+CHEMBL4623367,1989632,ORGANISM,Human immunodeficiency virus,50677,Human immunodeficiency virus,F,1,Viruses,retro-transcribing,,38.0,38,False,0.0,27.0,71.05263157894737,637.8250000000003,6.0,47.0,nM,2020.0
+CHEMBL4627028,1993293,ORGANISM,Hepatitis C virus,50643,Hepatitis C virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,19.0,19,False,0.0,17.0,89.47368421052632,693.6450000000003,6.0,48.0,nM,2020.0
+CHEMBL4649971,1998132,ORGANISM,Mycobacterium tuberculosis,50309,Mycobacterium tuberculosis,F,1,Bacteria,Gram-Positive,Mycobacterium,165.0,122,False,43.0,16.0,13.114754098360656,565.6200000000005,5.0,39.0,nM,2021.0
+CHEMBL4649973,1998134,ORGANISM,Wolbachia pipientis,120019,Wolbachia pipientis,F,1,Bacteria,Gram-Negative,Alphaproteobacteria,167.0,81,False,86.0,39.0,48.14814814814815,572.5020000000003,5.45,40.0,nM,2021.0
+CHEMBL4669514,2015936,ORGANISM,Middle East respiratory syndrome-related coronavirus,118652,Middle East respiratory syndrome-related coronavirus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,20.0,20,False,0.0,10.0,50.0,446.835,5.404999999999999,32.0,nM,2020.0
+CHEMBL4670175,2016597,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,23.0,23,False,0.0,14.0,60.869565217391305,661.7060000000004,6.0,48.0,nM,2020.0
+CHEMBL4670179,2016601,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,24.0,24,False,0.0,21.0,87.5,661.7060000000004,6.0,48.0,nM,2020.0
+CHEMBL4670542,2016964,ORGANISM,Zaire ebolavirus,118802,Zaire ebolavirus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,31.0,31,False,0.0,22.0,70.96774193548387,731.9560000000001,6.0,52.0,nM,2020.0
+CHEMBL4670543,2016965,ORGANISM,Marburgvirus,118651,Marburgvirus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,30.0,30,False,0.0,15.0,50.0,731.9560000000001,5.865,52.0,nM,2020.0
+CHEMBL4677207,2023394,ORGANISM,SARS-CoV-2,118698,Severe acute respiratory syndrome coronavirus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,28.0,28,False,0.0,14.0,50.0,653.054,5.0600000000000005,44.0,nM,2021.0
+CHEMBL4679608,2025795,ORGANISM,Streptococcus mutans,50262,Streptococcus mutans,F,1,Bacteria,Gram-Positive,Streptococcus,26.0,26,False,0.0,3.0,11.538461538461538,427.48200000000014,5.0,30.0,nM,2021.0
+CHEMBL4682690,2028532,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,22.0,22,False,0.0,19.0,86.36363636363636,479.3820000000003,6.0,34.0,nM,2020.0
+CHEMBL4682691,2028533,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,19.0,19,False,0.0,9.0,47.36842105263158,479.3820000000003,5.4,34.0,nM,2020.0
+CHEMBL4682692,2028534,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,9.0,50.0,479.3820000000003,5.4350000000000005,34.0,nM,2020.0
+CHEMBL4682693,2028535,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,20.0,20,False,0.0,10.0,50.0,479.3820000000003,5.775,34.0,nM,2020.0
+CHEMBL4686549,2032391,ORGANISM,Influenza A virus,50652,Influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,21.0,21,False,0.0,10.0,47.61904761904762,694.8039999999999,5.2,51.0,nM,2020.0
+CHEMBL4689167,2035009,ORGANISM,Hepatitis B virus,50606,Hepatitis B virus,F,1,Viruses,retro-transcribing,,21.0,21,False,0.0,16.0,76.19047619047619,509.40100000000007,6.0,33.0,nM,2021.0
+CHEMBL4699742,2045043,ORGANISM,Mycobacterium smegmatis,50380,Mycobacterium smegmatis,F,1,Bacteria,Gram-Positive,Mycobacterium,30.0,30,False,0.0,3.0,10.0,379.26100000000014,5.0,24.0,nM,2020.0
+CHEMBL4700293,2045594,ORGANISM,Vaccinia virus,50600,Vaccinia virus,F,1,Viruses,dsDNA,,20.0,20,False,0.0,10.0,50.0,376.334,5.529999999999999,27.0,nM,2020.0
+CHEMBL4703476,2048777,ORGANISM,Human enterovirus 71,50746,Enterovirus A71,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,21.0,21,False,0.0,10.0,47.61904761904762,499.3530000000003,5.09,30.0,nM,2020.0
+CHEMBL4704510,2049811,ORGANISM,Human adenovirus type 5,50712,Human adenovirus 5,F,1,Viruses,dsDNA,,54.0,54,False,0.0,27.0,50.0,577.5520000000004,5.895,40.0,nM,2020.0
+CHEMBL4708227,2053226,ORGANISM,Human enterovirus 71,50746,Enterovirus A71,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,19.0,19,False,0.0,9.0,47.36842105263158,371.5250000000001,5.62,27.0,nM,2020.0
+CHEMBL4709388,2054387,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,32.0,32,False,0.0,16.0,50.0,492.41700000000014,6.0,35.0,nM,2020.0
+CHEMBL4710312,2055311,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,20.0,20,False,0.0,14.0,70.0,540.0410000000002,6.0,37.0,nM,2020.0
+CHEMBL4710313,2055312,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,26.0,26,False,0.0,13.0,50.0,540.0410000000002,5.98,37.0,nM,2020.0
+CHEMBL4722366,2067113,ORGANISM,Influenza A virus,50652,Influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,34.0,34,False,0.0,13.0,38.23529411764706,435.3430000000001,5.0,26.0,nM,2020.0
+CHEMBL4726305,2070771,ORGANISM,Dengue virus 2,101767,Dengue virus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,51.0,50,False,1.0,24.0,48.0,514.8130000000001,5.7,35.0,nM,2020.0
+CHEMBL4737802,2082011,ORGANISM,Respiratory syncytial virus,50678,Respiratory syncytial virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,27.0,27,False,0.0,5.0,18.51851851851852,476.57700000000034,5.0,35.0,nM,2021.0
+CHEMBL4739111,2083320,ORGANISM,SARS-CoV-2,118698,Severe acute respiratory syndrome coronavirus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,21.0,21,False,0.0,14.0,66.66666666666667,375.0420000000001,6.0,24.0,nM,2021.0
+CHEMBL4767523,2086260,ORGANISM,Human coxsackievirus B3,50617,Human coxsackievirus B3,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,33.0,33,False,0.0,24.0,72.72727272727273,500.4770000000003,6.0,36.0,nM,2020.0
+CHEMBL4767525,2086262,ORGANISM,Human coxsackievirus B3,50617,Human coxsackievirus B3,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,29.0,29,False,0.0,16.0,55.172413793103445,500.4770000000003,6.0,36.0,nM,2020.0
+CHEMBL4767526,2086263,ORGANISM,Human coxsackievirus B3,50617,Human coxsackievirus B3,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,25.0,25,False,0.0,12.0,48.0,486.3590000000001,5.4,34.0,nM,2020.0
+CHEMBL4767527,2086264,ORGANISM,Human rhinovirus 2,50674,Human rhinovirus A2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,25.0,25,False,0.0,13.0,52.0,503.47700000000015,6.0,36.0,nM,2020.0
+CHEMBL4767529,2086266,ORGANISM,Human rhinovirus 14,50679,Human rhinovirus B14,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,30.0,30,False,0.0,21.0,70.0,503.47700000000015,6.0,36.0,nM,2020.0
+CHEMBL4767744,2086481,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,27.0,27,False,0.0,13.0,48.14814814814815,412.9610000000001,5.71,29.0,nM,2020.0
+CHEMBL4768132,2086869,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,22.0,22,False,0.0,10.0,45.45454545454545,664.7660000000003,5.0,50.0,nM,2020.0
+CHEMBL4768319,2087056,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,27.0,27,False,0.0,13.0,48.14814814814815,506.6460000000002,5.5,34.0,nM,2020.0
+CHEMBL4768320,2087057,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,40.0,40,False,0.0,26.0,65.0,506.6460000000002,6.0,35.0,nM,2020.0
+CHEMBL4768747,2087484,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,62.0,62,False,0.0,32.0,51.61290322580645,426.2510000000002,6.0,26.0,nM,2020.0
+CHEMBL4768748,2087485,ORGANISM,Cytomegalovirus,50529,Cytomegalovirus,F,1,Viruses,dsDNA,,59.0,59,False,0.0,28.0,47.45762711864407,426.2510000000002,5.55,26.0,nM,2020.0
+CHEMBL4770527,2089264,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,46.0,46,False,0.0,37.0,80.43478260869566,502.05800000000016,6.0,36.0,nM,2020.0
+CHEMBL4770785,2089522,ORGANISM,Dengue virus 2,101767,Dengue virus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,34.0,34,False,0.0,17.0,50.0,579.5380000000001,5.4350000000000005,39.0,nM,2020.0
+CHEMBL4775018,2093755,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,29.0,29,False,0.0,24.0,82.75862068965517,560.6550000000004,6.0,41.0,nM,2020.0
+CHEMBL4813293,2104790,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,20.0,20,False,0.0,16.0,80.0,583.692,6.0,44.0,nM,2021.0
+CHEMBL4813296,2104793,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,19.0,19,False,0.0,15.0,78.94736842105263,583.692,6.0,44.0,nM,2021.0
+CHEMBL4813308,2104805,ORGANISM,Human immunodeficiency virus,50677,Human immunodeficiency virus,F,1,Viruses,retro-transcribing,,20.0,20,False,0.0,11.0,55.0,643.8730000000002,6.0,47.0,nM,2021.0
+CHEMBL4813309,2104806,ORGANISM,Human immunodeficiency virus,50677,Human immunodeficiency virus,F,1,Viruses,retro-transcribing,,21.0,21,False,0.0,11.0,52.38095238095238,643.8730000000002,6.0,47.0,nM,2021.0
+CHEMBL4822899,2114049,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,22.0,22,False,0.0,18.0,81.81818181818181,493.57000000000016,6.0,38.0,nM,2021.0
+CHEMBL4822901,2114051,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,22.0,22,False,0.0,17.0,77.27272727272727,493.57000000000016,6.0,38.0,nM,2021.0
+CHEMBL4823991,2115050,ORGANISM,Human respiratory syncytial virus,50521,Human respiratory syncytial virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,24.0,24,False,0.0,19.0,79.16666666666667,681.7280000000003,6.0,47.0,nM,2021.0
+CHEMBL4825887,2116821,ORGANISM,Human respiratory syncytial virus,50521,Human respiratory syncytial virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,21.0,21,False,0.0,15.0,71.42857142857143,495.4980000000003,6.0,35.0,nM,2021.0
+CHEMBL4826198,2117132,ORGANISM,Hepatitis B virus,50606,Hepatitis B virus,F,1,Viruses,retro-transcribing,,21.0,21,False,0.0,18.0,85.71428571428571,527.6070000000003,6.0,37.0,nM,2021.0
+CHEMBL4827058,2117992,ORGANISM,SARS-CoV-2,118698,Severe acute respiratory syndrome coronavirus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,21.0,18,False,3.0,6.0,33.333333333333336,553.9970000000003,5.96,37.0,nM,2021.0
+CHEMBL4827091,2118025,ORGANISM,Influenza A virus,50652,Influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,19.0,19,False,0.0,9.0,47.36842105263158,621.5799999999998,5.46,45.0,nM,2021.0
+CHEMBL4827555,2118489,ORGANISM,Influenza A virus,50652,Influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,26.0,26,False,0.0,21.0,80.76923076923077,416.32600000000014,6.0,26.0,nM,2021.0
+CHEMBL4829044,2119897,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,19.0,19,False,0.0,9.0,47.36842105263158,457.4640000000002,5.39,32.0,nM,2021.0
+CHEMBL4832821,2123588,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,23.0,23,False,0.0,18.0,78.26086956521739,590.7750000000001,6.0,41.0,nM,2021.0
+CHEMBL4833208,2123975,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,13.0,72.22222222222223,507.5540000000004,6.0,38.0,nM,2021.0
+CHEMBL4835597,2126252,ORGANISM,Chikungunya virus,118637,Chikungunya virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,36.0,36,False,0.0,18.0,50.0,461.4020000000002,5.545,32.0,nM,2021.0
+CHEMBL4843381,2133771,ORGANISM,Dengue virus 2,101767,Dengue virus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,44.0,44,False,0.0,22.0,50.0,684.5720000000002,5.245,49.0,nM,2021.0
+CHEMBL5032825,2148427,ORGANISM,Human enterovirus 68,101847,Enterovirus D68,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,39.0,39,False,0.0,20.0,51.282051282051285,363.4460000000001,6.0,26.0,nM,2021.0
+CHEMBL5032826,2148428,ORGANISM,Human enterovirus 71,50746,Enterovirus A71,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,31.0,31,False,0.0,20.0,64.51612903225806,357.50200000000007,6.0,26.0,nM,2021.0
+CHEMBL5032827,2148429,ORGANISM,Human coxsackievirus B3,50617,Human coxsackievirus B3,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,30.0,30,False,0.0,19.0,63.333333333333336,357.50200000000007,6.0,26.0,nM,2021.0
+CHEMBL5033387,2148989,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,22.0,22,False,0.0,19.0,86.36363636363636,511.9230000000002,6.0,37.0,nM,2021.0
+CHEMBL5033388,2148990,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,25.0,25,False,0.0,21.0,84.0,511.9230000000002,6.0,37.0,nM,2021.0
+CHEMBL5033390,2148992,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,23.0,23,False,0.0,18.0,78.26086956521739,511.9230000000002,6.0,37.0,nM,2021.0
+CHEMBL5034816,2150354,ORGANISM,Hepatitis C virus,50643,Hepatitis C virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,61.0,61,False,0.0,30.0,49.18032786885246,512.7170000000001,5.86,33.0,nM,2021.0
+CHEMBL5035523,2151061,ORGANISM,Human enterovirus 68,101847,Enterovirus D68,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,25.0,25,False,0.0,12.0,48.0,674.651,5.91,48.0,nM,2021.0
+CHEMBL5035526,2151064,ORGANISM,Human enterovirus 71,50746,Enterovirus A71,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,24.0,24,False,0.0,13.0,54.16666666666666,674.651,6.0,48.0,nM,2021.0
+CHEMBL5037880,2153333,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,35.0,35,False,0.0,19.0,54.285714285714285,546.6310000000003,6.0,41.0,nM,2021.0
+CHEMBL5037882,2153335,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,38.0,38,False,0.0,28.0,73.6842105263158,546.6310000000003,6.0,41.0,nM,2021.0
+CHEMBL5037883,2153336,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,33.0,33,False,0.0,16.0,48.48484848484848,538.6080000000003,5.66,40.0,nM,2021.0
+CHEMBL5037885,2153338,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,9.0,50.0,536.5920000000003,5.529999999999999,40.0,nM,2021.0
+CHEMBL5037889,2153342,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,33.0,33,False,0.0,16.0,48.48484848484848,546.6310000000003,5.83,41.0,nM,2021.0
+CHEMBL5037906,2153359,ORGANISM,Dengue virus 2,101767,Dengue virus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,39.0,39,False,0.0,19.0,48.71794871794872,461.2590000000002,5.23,32.0,nM,2021.0
+CHEMBL5037908,2153361,ORGANISM,Venezuelan equine encephalitis virus,50637,Venezuelan equine encephalitis virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,30.0,30,False,0.0,15.0,50.0,414.16800000000006,5.535,27.0,nM,2021.0
+CHEMBL5041682,2157022,ORGANISM,Hepatitis C virus,50643,Hepatitis C virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,31.0,30,False,1.0,24.0,80.0,559.5450000000001,6.0,40.0,nM,2022.0
+CHEMBL5041823,2157163,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,12.0,66.66666666666667,561.6680000000001,6.0,40.0,nM,2022.0
+CHEMBL5043120,2158370,ORGANISM,SARS-CoV-2,118698,Severe acute respiratory syndrome coronavirus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,18.0,18,False,0.0,6.0,33.333333333333336,602.5850000000002,5.0,42.0,nM,2022.0
+CHEMBL5043599,2158849,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,84.0,84,False,0.0,44.0,52.38095238095238,621.9250000000002,6.0,41.0,nM,2022.0
+CHEMBL5044979,2160229,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,30.0,30,False,0.0,27.0,90.0,461.4510000000001,6.0,34.0,nM,2022.0
+CHEMBL5044982,2160232,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,21.0,21,False,0.0,13.0,61.90476190476191,461.4510000000001,6.0,34.0,nM,2022.0
+CHEMBL5047269,2162408,ORGANISM,Hepatitis C virus,50643,Hepatitis C virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,46.0,46,False,0.0,23.0,50.0,749.956,5.95,52.0,nM,2022.0
+CHEMBL5107398,2195038,ORGANISM,Acinetobacter baumannii,50191,Acinetobacter baumannii,F,1,Bacteria,Gram-Negative,Acinetobacter,44.0,44,False,0.0,16.0,36.36363636363637,500.5230000000003,5.0,36.0,nM,2022.0
+CHEMBL5107399,2195039,ORGANISM,Acinetobacter baumannii,50191,Acinetobacter baumannii,F,1,Bacteria,Gram-Negative,Acinetobacter,47.0,47,False,0.0,20.0,42.5531914893617,500.5230000000003,5.0,36.0,nM,2022.0
+CHEMBL5107400,2195040,ORGANISM,Acinetobacter baumannii,50191,Acinetobacter baumannii,F,1,Bacteria,Gram-Negative,Acinetobacter,35.0,35,False,0.0,4.0,11.428571428571429,500.5230000000003,5.0,36.0,nM,2022.0
+CHEMBL5107403,2195043,ORGANISM,Escherichia coli,50212,Escherichia coli,F,1,Bacteria,Gram-Negative,Escherichia,51.0,51,False,0.0,16.0,31.37254901960784,536.5570000000002,5.0,38.0,nM,2022.0
+CHEMBL5107404,2195044,ORGANISM,Escherichia coli,50212,Escherichia coli,F,1,Bacteria,Gram-Negative,Escherichia,60.0,60,False,0.0,24.0,40.0,536.5570000000002,5.0,38.0,nM,2022.0
+CHEMBL5107405,2195045,ORGANISM,Escherichia coli,50212,Escherichia coli,F,1,Bacteria,Gram-Negative,Escherichia,63.0,63,False,0.0,28.0,44.44444444444444,536.5570000000002,5.0,38.0,nM,2022.0
+CHEMBL5107408,2195048,ORGANISM,Pseudomonas aeruginosa,50117,Pseudomonas aeruginosa,F,1,Bacteria,Gram-Negative,Pseudomonas,33.0,33,False,0.0,16.0,48.48484848484848,414.864,5.0,29.0,nM,2022.0
+CHEMBL5107409,2195049,ORGANISM,Pseudomonas aeruginosa,50117,Pseudomonas aeruginosa,F,1,Bacteria,Gram-Negative,Pseudomonas,40.0,40,False,0.0,20.0,50.0,500.5230000000003,5.125,36.0,nM,2022.0
+CHEMBL5107521,2195161,ORGANISM,Salmonella typhimurium,50156,Salmonella enterica subsp. enterica serovar Typhimurium,F,1,Bacteria,Gram-Negative,Salmonella,23.0,23,False,0.0,9.0,39.130434782608695,417.7230000000001,5.0,27.0,nM,2022.0
+CHEMBL5113001,2200485,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,51.0,51,False,0.0,25.0,49.01960784313726,470.4150000000005,5.75,32.0,nM,2022.0
+CHEMBL5114072,2201364,ORGANISM,Hepatitis B virus,50606,Hepatitis B virus,F,1,Viruses,retro-transcribing,,38.0,34,False,4.0,16.0,47.05882352941177,491.9280000000002,5.735,33.0,nM,2022.0
+CHEMBL5115949,2203241,ORGANISM,Coxsackievirus A16,120838,Coxsackievirus A16,F,1,Viruses,ssRNA,,18.0,18,False,0.0,14.0,77.77777777777777,776.951,6.0,49.0,nM,2022.0
+CHEMBL5116803,2204095,ORGANISM,Chikungunya virus,118637,Chikungunya virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,22.0,22,False,0.0,11.0,50.0,472.4150000000001,5.175000000000001,34.0,nM,2022.0
+CHEMBL5117631,2204923,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,53.0,53,False,0.0,26.0,49.0566037735849,521.3770000000001,5.74,37.0,nM,2022.0
+CHEMBL5117635,2204927,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,50.0,50,False,0.0,25.0,50.0,521.3770000000001,5.65,37.0,nM,2022.0
+CHEMBL5117636,2204928,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,48.0,48,False,0.0,24.0,50.0,521.3770000000001,5.565,37.0,nM,2022.0
+CHEMBL5117637,2204929,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,39.0,39,False,0.0,19.0,48.71794871794872,521.3770000000001,5.16,37.0,nM,2022.0
+CHEMBL5117639,2204931,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,48.0,48,False,0.0,24.0,50.0,521.3770000000001,5.605,37.0,nM,2022.0
+CHEMBL5117641,2204933,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,9.0,50.0,510.40700000000015,5.495,37.0,nM,2022.0
+CHEMBL5126487,2213538,ORGANISM,SARS-CoV-2,118698,Severe acute respiratory syndrome coronavirus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,20.0,20,False,0.0,14.0,70.0,599.9820000000001,6.0,41.0,nM,2022.0
+CHEMBL5129301,2216169,ORGANISM,Feline immunodeficiency virus,50657,Feline immunodeficiency virus,F,1,Viruses,retro-transcribing,,29.0,29,False,0.0,14.0,48.27586206896552,384.9170000000001,5.7,25.0,nM,2022.0
+CHEMBL5132117,2218783,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,21.0,21,False,0.0,10.0,47.61904761904762,649.7730000000003,5.53,47.0,nM,2022.0
+CHEMBL5133197,2219863,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,27.0,27,False,0.0,9.0,33.333333333333336,393.2810000000001,5.0,25.0,nM,2022.0
+CHEMBL5134088,2220754,ORGANISM,Chikungunya virus,118637,Chikungunya virus,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,50.0,47,False,3.0,24.0,51.06382978723404,465.5900000000002,5.83,34.0,nM,2022.0
+CHEMBL5134495,2221161,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,22.0,22,False,0.0,18.0,81.81818181818181,366.321,6.0,24.0,nM,2022.0
+CHEMBL5135901,2222567,ORGANISM,SARS-CoV-2,118698,Severe acute respiratory syndrome coronavirus 2,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,19.0,19,False,0.0,9.0,47.36842105263158,558.6750000000003,5.08,41.0,nM,2022.0
+CHEMBL5140361,2226848,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,42.0,42,False,0.0,29.0,69.04761904761905,435.3930000000001,6.0,29.0,nM,2022.0
+CHEMBL5140364,2226851,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,34.0,34,False,0.0,17.0,50.0,435.2850000000001,5.335,28.0,nM,2022.0
+CHEMBL5140365,2226852,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,24.0,24,False,0.0,9.0,37.5,435.2850000000001,5.0,28.0,nM,2022.0
+CHEMBL5140366,2226853,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,29.0,29,False,0.0,14.0,48.27586206896552,435.2850000000001,5.24,28.0,nM,2022.0
+CHEMBL5140368,2226855,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,41.0,41,False,0.0,21.0,51.21951219512195,435.2850000000001,6.0,28.0,nM,2022.0
+CHEMBL5140687,2227174,ORGANISM,Hepatitis B virus,50606,Hepatitis B virus,F,1,Viruses,retro-transcribing,,33.0,32,False,1.0,26.0,81.25,556.4090000000002,6.0,38.0,nM,2022.0
+CHEMBL5142775,2229262,ORGANISM,Hepatitis B virus,50606,Hepatitis B virus,F,1,Viruses,retro-transcribing,,57.0,57,False,0.0,28.0,49.12280701754386,437.8540000000002,5.68,31.0,nM,2022.0
+CHEMBL5144282,2230510,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,20.0,20,False,0.0,9.0,45.0,514.3280000000003,5.21,34.0,nM,2022.0
+CHEMBL5144828,2231056,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,16.0,88.88888888888889,579.9150000000003,6.0,40.0,nM,2022.0
+CHEMBL5144829,2231057,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,16.0,88.88888888888889,579.9150000000003,6.0,40.0,nM,2022.0
+CHEMBL5144830,2231058,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,13.0,72.22222222222223,579.9150000000003,6.0,40.0,nM,2022.0
+CHEMBL5146636,2232864,ORGANISM,Human immunodeficiency virus 1,50607,Human immunodeficiency virus 1,F,1,Viruses,retro-transcribing,,27.0,23,False,4.0,20.0,86.95652173913044,581.706,6.0,41.0,nM,2022.0
+CHEMBL5146928,2233156,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,19.0,19,False,0.0,9.0,47.36842105263158,773.562,5.38,47.0,nM,2022.0
+CHEMBL5159760,2245550,ORGANISM,Influenza A virus,50652,influenza A virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,31.0,31,False,0.0,19.0,61.29032258064516,492.99300000000005,6.0,24.0,nM,2022.0
+CHEMBL5159907,2245697,ORGANISM,Salmonella typhimurium,50156,Salmonella enterica subsp. enterica serovar Typhimurium,F,1,Bacteria,Gram-Negative,Salmonella,51.0,51,False,0.0,25.0,49.01960784313726,486.31700000000006,5.24,29.0,nM,2022.0
+CHEMBL5161545,2247335,ORGANISM,Rabies virus,118813,Rabies virus,F,1,Viruses,ssRNA,ssRNA negative-strand viruses,32.0,32,False,0.0,16.0,50.0,523.6120000000002,5.32,39.0,nM,2022.0
+CHEMBL5217494,2262483,ORGANISM,Human enterovirus 68,101847,Enterovirus D68,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,49.0,47,False,2.0,34.0,72.34042553191489,426.3980000000003,6.0,31.0,nM,2022.0
+CHEMBL833835,310233,ORGANISM,Human immunodeficiency virus 3,50737,human immunodeficiency virus type IIIB,F,1,Viruses,retro-transcribing,,21.0,21,False,0.0,16.0,76.19047619047619,706.8290000000001,6.0,51.0,nM,2004.0
+CHEMBL834283,311841,ORGANISM,Enterovirus,50665,Human enterovirus 71,F,1,Viruses,ssRNA,ssRNA positive-strand viruses,19.0,19,False,0.0,15.0,78.94736842105263,503.95200000000017,6.0,35.0,nM,2005.0
+CHEMBL961203,519838,ORGANISM,Human papillomavirus type 16,101849,Human papillomavirus type 16,F,1,Viruses,dsDNA,,26.0,24,False,2.0,12.0,50.0,383.3330000000001,6.0,25.0,nM,2009.0
+CHEMBL961555,557439,ORGANISM,Human immunodeficiency virus 2,50658,Human immunodeficiency virus 2,F,1,Viruses,retro-transcribing,,18.0,18,False,0.0,9.0,50.0,634.6190000000003,5.695,44.0,nM,2008.0
+CHEMBL995354,522222,ORGANISM,Camelpox virus,101697,Camelpox virus,F,1,Viruses,dsDNA,,22.0,22,False,0.0,11.0,50.0,560.7170000000001,5.1850000000000005,38.0,nM,2007.0
