@@ -155,18 +155,22 @@ def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.Data
     plt.ylabel('Frequency')
     plt.title('Histogram of pchembl_value')
     if params.save: 
-        plt.savefig('pchebml_value_histogram.png')
+        plt.savefig(f'pchebml_value_histogram_min_size_{min(params.min_size_list)}.png')
 
     # Apply thresholding function
     filtered_df = filtered_df.groupby("chembl_id").apply(threshold_helper)
     # Print number of unique targets
     print("Number of unique targets:", filtered_df['target_pref_name'].nunique())
+    print(f"Viruses: {filtered_df.loc[filtered_df['organism_taxonomy_l1'] == 'Viruses']['target_pref_name'].nunique()}, \
+          Bacteria: {filtered_df.loc[filtered_df['organism_taxonomy_l1'] == 'Bacteria']['target_pref_name'].nunique()}, \
+          Fungi: {filtered_df.loc[filtered_df['organism_taxonomy_l1'] == 'Fungi']['target_pref_name'].nunique()}"
+          )
 
     # Save to new csv
-    if params.save:
-        filtered_df.to_csv('bioassay_table_filtered_active.csv', index=False)
+    # if params.save:
+        # filtered_df.to_csv('bioassay_table_filtered_active.csv', index=False)
 
-    return filtered_df
+    # return filtered_df
 
 def clean_assay(df: pd.DataFrame, 
                 assay: str, 
@@ -546,4 +550,4 @@ if __name__ ==  '__main__':
     # Implement initial threshold and get descriptive statistics
     filtered_df = implement_threshold(df, params)
     # Prepare data into FS-Mol format
-    prepare_data(filtered_df, params)
+    # prepare_data(filtered_df, params)
