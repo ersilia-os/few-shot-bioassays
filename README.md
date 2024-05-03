@@ -19,8 +19,7 @@
 `dataset/valid/*`: Contains all validation assays in FS-Mol format. <br>
 `dataset/train/*`: Contains all train assay in FS-Mol format. <br>
 
-## Instructions for Supercloud
+## Supercloud Code Differences
 
-Use anaconda/2023a for protonet
+All code should be the same except notebook.ipynb which is optimized for the supercloud environment on supercloud, and for Andrew's environment on the local ersilia-fsmol directory. Results are most up to date on Supercloud.
 
-For multitask, use anaconda.2023a-pytorch and request a GPU: LLsub -i -s 20 -g volta:1

@@ -6,6 +6,7 @@ import csv
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 from typing import Dict, Any, Optional
 from dpu_utils.utils import run_and_debug, RichPath
 
@@ -44,10 +45,13 @@ def load_params():
                         help = "The number of processes to use when running FS-Mol functions")
     parser.add_argument('--load_metadata', type=str, default='../ersilia-fsmol/fs_mol/preprocessing/utils/helper_files',
                         help = "The path to the metadata directory for molecule graph featurization")
-    parser.add_argument('--min_size', type=int, default=16,
-                        help = "The minimum size of the assay (in terms of number of molecules tested")
+    parser.add_argument('--min_size_list', type=json.loads, default=[16],
+                        help = """
+                                A list minimum size of the assay (in terms of number of molecules tested). 
+                                The code generates a dataset for each minimum size in the list.
+                               """)
     parser.add_argument('--max_size', type=int, default=None,
-                        help = "The maximum size of the assay (in terms of number of molecules tested")
+                        help = "The maximum size of the assay (in terms of number of molecules tested)")
     parser.add_argument('--balance_limits', type=tuple, default=(10.0, 90.0),
                         help = "The lower and upper bound for the percentage of the molecules that must be active for the given assay.")
     parser.add_argument('--max_mol_weight', type=float, default=900.0,
@@ -58,6 +62,8 @@ def load_params():
                         help = "The size of the test set in terms of absolute assays.")
     parser.add_argument('--val_percentage', type=float, default=0.05,
                         help = "Percentage of non-test assays that should be used as validation.")
+    parser.add_argument('--load_from_csv', type=bool, default=False,
+                        help="True if we want to load from the standardized_df already saved rather than restandardize all molecules.")
     params = parser.parse_args()
     return params
 
@@ -136,7 +142,9 @@ def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.Data
     # We filter out compounds with fewer than min_size compounds
 
     # Grouping by assay
-    filtered_df = gp.filter(lambda x: len(x) > params.min_size)
+    # We make sure that each assay has more molecules than the minimum number in the min_size_lists
+    # And also plus one because we need test set to be of at least size 2
+    filtered_df = gp.filter(lambda x: len(x) > min(params.min_size_list) + 1)
     print('Post Initial Filtering, # of unique assays', len(filtered_df['assay_id'].unique()))
     print('Post Initial Filtering, # of unique compounds', len(filtered_df))
 
@@ -438,88 +446,96 @@ def prepare_data(df, params):
                 From ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
                 Writes the 'datapoints' of an assay; i.e. the list of dictionaries representing the molecules to a jsonl.gz file
     """
-    # Group dataframe by assay_id
-    gb = df.groupby('chembl_id')
-    if params.test_run:
-        df.sort_values('chembl_id', inplace=True)
-        gb = df.iloc[:500].groupby('chembl_id')
+    if not params.load_from_csv:
+        # Group dataframe by assay_id
+        gb = df.groupby('chembl_id')
+        if params.test_run:
+            df.sort_values('chembl_id', inplace=True)
+            gb = df.iloc[:500].groupby('chembl_id')
 
-    # Initialize a summary.csv
-    csv_file = open("summary.csv", 'w', newline="")
-    fieldnames = [
-        "chembl_id",
-        "target_id",
-        "assay_type",
-        "assay_organism",
-        "raw_size",
-        "cleaned_size",
-        "cleaning_failed",
-        "cleaning_size_delta",
-        "num_pos",
-        "percentage_pos",
-        "max_mol_weight",
-        "threshold",
-        "max_num_atoms",
-        "confidence_score",
-        "standard_units",
-        "year",
-    ]
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    csv_writer.writeheader()
+        # Initialize a summary.csv
+        csv_file = open("summary.csv", 'w', newline="")
+        fieldnames = [
+            "chembl_id",
+            "target_id",
+            "assay_type",
+            "assay_organism",
+            "raw_size",
+            "cleaned_size",
+            "cleaning_failed",
+            "cleaning_size_delta",
+            "num_pos",
+            "percentage_pos",
+            "max_mol_weight",
+            "threshold",
+            "max_num_atoms",
+            "confidence_score",
+            "standard_units",
+            "year",
+        ]
+        csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        csv_writer.writeheader()
 
-    # Apply clean to each assay
-    standardize_df = gb.apply(lambda x: clean_assay(x, x.name, csv_writer, params))
-    # Save standardized df
-    standardize_df.to_csv('standardized_df.csv')
-    # Close the summary.csv file
-    csv_file.close()
-
-    # Refilter assays after cleaning
-    sdf = filter_assays('summary.csv', params) # ersilia-fsmol/fs_mol/preprocessing/feauturize.py
-    print("After additional cleaning, we have", len(sdf), "unique assays.")
-
-    # At this point, all assays are in the assays_to_process list.
-    train_assays, val_assays, test_assays = split_assays(sdf, params) 
-
-    # Load metadata for featurizations
-    if params.load_metadata:
-
-        print(f"Loading metadata from dir {params.load_metadata}")
-        metapath = RichPath.create(params.load_metadata)
-        path = metapath.join("metadata.pkl.gz")
-        metadata = path.read_by_file_suffix()
-        atom_feature_extractors = metadata["feature_extractors"]
-
+        # Apply clean to each assay
+        standardize_df = gb.apply(lambda x: clean_assay(x, x.name, csv_writer, params))
+        # Save standardized df
+        standardize_df.to_csv('standardized_df.csv')
+        # Close the summary.csv file
+        csv_file.close()
     else:
-        raise ValueError(
-            "Metadata must be loaded for this processing, please supply "
-            "directory containing metadata.pkl.gz."
-        )
+        standardize_df = pd.read_csv('standardized_df.csv')
 
-    # Featurize and save data
-    # Loop taken from run() of featurize.py
-    stand_gb = standardize_df.groupby('chembl_id')
-    for assay_list, folder_name in zip([train_assays, val_assays, test_assays], ['train', 'val', 'test']):
-        for assay in assay_list:
-            # For each assay, get all the molecules
-            group = stand_gb.get_group(assay)
-            # Transform into a dictionary with keys the columns
-            datapoints = group.to_dict('list')
+    for min_size in params.min_size_list:
+        # For every min size in our list, we repeat the saving process
+        # Inefficient since we are re-storing the same assay multiple times, but I think the computationally expensive part is the standardize
+        # Which we don't re-do for all min sizes
+        params.min_size = min_size
+        # Refilter assays after cleaning
+        sdf = filter_assays('summary.csv', params) # ersilia-fsmol/fs_mol/preprocessing/feauturize.py
+        print("After additional cleaning, we have", len(sdf), "unique assays.")
 
-            # We save the featurized molecules as a list of dictionaries
-            feat_data_list = []
-            for i in range(len(datapoints['smiles'])):
-                # Isolate the ith molecule
-                datapoint = {key: value[i] for key, value in datapoints.items()}
-                # Add rdkit_molecule information
-                featurized_datapoint = smiles_to_rdkit_mol(datapoint)
-                # And also represent it as a graph using the metadata
-                datapoint["graph"] = molecule_to_graph(datapoint["mol"], atom_feature_extractors) # ersilia-fsmol/fs_mol/preprocessing/featurisers/molgraph_utils.py
-                # Append to it to our list of featurized datapoints
-                feat_data_list.append(featurized_datapoint)
-            
-            # Store all the information for the assay as is done by FS-Mol code
-            write_jsonl_gz_data(f"dataset/{folder_name}/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
+        # At this point, all assays are in the assays_to_process list.
+        train_assays, val_assays, test_assays = split_assays(sdf, params) 
+
+        # Load metadata for featurizations
+        if params.load_metadata:
+
+            print(f"Loading metadata from dir {params.load_metadata}")
+            metapath = RichPath.create(params.load_metadata)
+            path = metapath.join("metadata.pkl.gz")
+            metadata = path.read_by_file_suffix()
+            atom_feature_extractors = metadata["feature_extractors"]
+
+        else:
+            raise ValueError(
+                "Metadata must be loaded for this processing, please supply "
+                "directory containing metadata.pkl.gz."
+            )
+
+        # Featurize and save data
+        # Loop taken from run() of featurize.py
+        stand_gb = standardize_df.groupby('chembl_id')
+        for assay_list, folder_name in zip([train_assays, val_assays, test_assays], ['train', 'valid', 'test']):
+            for assay in assay_list:
+                # For each assay, get all the molecules
+                group = stand_gb.get_group(assay)
+                # Transform into a dictionary with keys the columns
+                datapoints = group.to_dict('list')
+
+                # We save the featurized molecules as a list of dictionaries
+                feat_data_list = []
+                for i in range(len(datapoints['smiles'])):
+                    # Isolate the ith molecule
+                    datapoint = {key: value[i] for key, value in datapoints.items()}
+                    # Add rdkit_molecule information
+                    featurized_datapoint = smiles_to_rdkit_mol(datapoint)
+                    # And also represent it as a graph using the metadata
+                    datapoint["graph"] = molecule_to_graph(datapoint["mol"], atom_feature_extractors) # ersilia-fsmol/fs_mol/preprocessing/featurisers/molgraph_utils.py
+                    # Append to it to our list of featurized datapoints
+                    feat_data_list.append(featurized_datapoint)
+                
+                # Store all the information for the assay as is done by FS-Mol code
+                write_jsonl_gz_data(f"dataset/min_size_{min_size}/{folder_name}/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
 
 if __name__ ==  '__main__':
     # Load parameters
