@@ -1,7 +1,8 @@
 import os
 import json
+import sys
 
-DATASET_PATH = '/Users/phevo/Documents/Harvard/Junior-Year/CS288/few-shot-bioassays/dataset'
+DATASET_PATH = sys.argv[1] # Load in dataset path name
 
 file_names_dict = {}
 for folder in ['train', 'valid', 'test']:
