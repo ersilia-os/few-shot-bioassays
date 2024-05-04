@@ -16,8 +16,7 @@ def load_params():
 def load_target_info():
     assay_summary = pd.read_csv('summary.csv')
     chembl_data   = pd.read_csv('standardized_df.csv')
-    for size in [4, 8, 16]:
-        path = f"dataset/min_size_{size:02d}"
+    for path in ["dataset/min_size_04", "dataset/min_size_08", "dataset/min_size_16", "dataset/EOD-4-30-2024"]:
         with open(f"{path}/entire_train_set.json") as f:
             entire_train_set = json.load(f)
         test_set_molecules = chembl_data.loc[chembl_data["chembl_id"].isin(entire_train_set['test'])]
