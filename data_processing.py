@@ -540,7 +540,7 @@ def prepare_data(df, params):
                     feat_data_list.append(featurized_datapoint)
                 
                 # Store all the information for the assay as is done by FS-Mol code
-                write_jsonl_gz_data(f"dataset/min_size_{min_size:02d}/{folder_name}/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
+                write_jsonl_gz_data(f"dataset/mhnfs/min_size_{min_size:02d}/{folder_name}/{assay}.jsonl.gz", feat_data_list, len_data=len(feat_data_list)) # ersilia-fsmol/fs_mol/preprocessing/utils/save_utils.py
 
 if __name__ ==  '__main__':
     # Load parameters
