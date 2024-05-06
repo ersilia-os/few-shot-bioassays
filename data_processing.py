@@ -77,7 +77,6 @@ def threshold_helper(df: pd.DataFrame) -> pd.DataFrame:
     3) Apply the threshold to the data series.
 
     For activity measurements, pchembl value is used.
-        *This is opposed to FS-Mol which uses log standard value*
 
     Arguments:
         df: pd.DataFrame containing the data for a single assay
@@ -146,7 +145,7 @@ def implement_threshold(df: pd.DataFrame, params: argparse.Namespace) -> pd.Data
     # And also plus one because we need test set to be of at least size 2
     filtered_df = gp.filter(lambda x: len(x) > min(params.min_size_list) + 1)
     print('Post Initial Filtering, # of unique assays', len(filtered_df['assay_id'].unique()))
-    print('Post Initial Filtering, # of unique compounds', len(filtered_df))
+    print('Post Initial Filtering, # of compounds', len(filtered_df))
 
     # Plotting the histogram
     plt.clf()
@@ -426,7 +425,7 @@ def prepare_data(df, params):
             For each assay, we have a list of dictionaries where each dictionary represents a molecule post-cleaning and featurization
             For each assay, save this list of dictionaries in a jsonl.gz file with name the chembl id of the assay.
 
-        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2, 3, and 4.
+        THE FOLLOWING FUNCTION PERFORMS STEPS 1.2, 3, and 4 with our own train/test/validation split implemented.
 
         Arguments:
             df: pd.DataFrame, the filtered data
